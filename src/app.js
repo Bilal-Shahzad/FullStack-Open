@@ -1,18 +1,46 @@
-const App = () => {
-  const now = new Date()
-  const a = 10
-  const b = 20
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'p', null, 'Hello world, it is ', now.toString()
-    ),
-    React.createElement(
-      'p', null, a, ' plus ', b, ' is ', a + b
-    )
+const Hello = (props) => {
+
+  console.log(props)
+  return (
+    <div>
+      <p>
+
+        Hello {props.name}, you are {props.age} years old
+      </p>
+    </div>
   )
 }
+
+const App = () => {
+
+  const name = 'Bilal'
+  const age = 21
+
+  return (
+    <div>
+      <h1>Greetings</h1>
+
+      <Hello name='Maya' age={26 + 21} />
+      <Hello name={name} age={age} />
+    </div>
+  )
+}
+
+// const App = () => {
+//   const now = new Date()
+//   const a = 10
+//   const b = 20
+//   return React.createElement(
+//     'div',
+//     null,
+//     React.createElement(
+//       'p', null, 'Hello world, it is ', now.toString()
+//     ),
+//     React.createElement(
+//       'p', null, a, ' plus ', b, ' is ', a + b
+//     )
+//   )
+// }
 // console 
 // Hello from componenet 
 
