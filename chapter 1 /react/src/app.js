@@ -120,16 +120,45 @@
 // In React, the individual things rendered in braces must be primitive values, such as numbers or strings.
 
 // The fix is ​​as follows
+// const App = () => {
+//   const friends = [
+//     { name: 'Peter', age: 4 },
+//     { name: 'Maya', age: 10 },
+//   ]
+
+//   return (
+//     <div>
+//       <p>{friends[0].name} {friends[0].age}</p>
+//       <p>{friends[1].name} {friends[1].age}</p>
+//     </div>
+//   )
+// }
+
+// export default App
+
+
 const App = () => {
-  const friends = [
-    { name: 'Peter', age: 4 },
-    { name: 'Maya', age: 10 },
-  ]
+  const course = 'Half Stack application development'
+  const part1 = 'Fundamentals of React'
+  const exercises1 = 10
+  const part2 = 'Using props to pass data'
+  const exercises2 = 7
+  const part3 = 'State of a component'
+  const exercises3 = 14
 
   return (
     <div>
-      <p>{friends[0].name} {friends[0].age}</p>
-      <p>{friends[1].name} {friends[1].age}</p>
+      <h1>{course}</h1>
+      <p>
+        {part1} {exercises1}
+      </p>
+      <p>
+        {part2} {exercises2}
+      </p>
+      <p>
+        {part3} {exercises3}
+      </p>
+      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
     </div>
   )
 }
