@@ -19,6 +19,6 @@ Bilal.growOlder = function() {
     this.age += 1
   }
 
-  console.log(Bilal.age)   // 35 is printed
+  console.log(Bilal.age)   // 21 is printed
   Bilal.growOlder()
-  console.log(Bilal.age)   // 36 is printed
+  console.log(Bilal.age)   // 22 is printed
