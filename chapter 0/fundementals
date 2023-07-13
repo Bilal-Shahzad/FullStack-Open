@@ -1,0 +1,29 @@
+HTTP GET 
+The server and web browser communicate using the HTTP protocol. The Network tab in the browser shows this communication. When a page is reloaded, the console displays two events: the browser fetching the page contents from the server and downloading an image (kuva.png). The detailed view of the first event reveals that the browser successfully requested the page using the GET method and received a response with a status code of 200. The response headers provide information such as the response size and content type (HTML). The Response tab shows the HTML response, which contains a div element with a heading, a link to notes, and an img tag. The img tag triggers another HTTP request to fetch the image. The second event details the request for the image, specifying the address, request type (GET), and response details (image/png). The sequence diagram illustrates the flow of communication between the browser and server, showing the request and response sequence. The HTML page starts rendering before the image is fetched.
+
+Traditional Web Applications 
+The homepage of the example application is a traditional web application where the browser fetches the HTML document from the server. The HTML code is dynamically generated and includes the number of created notes. The code snippet provided demonstrates how the HTML page is formed using a template string. The browser's role is limited to fetching HTML data, while the server handles the application logic. The example uses the Express library with Node.js to create the web server.
+
+The homepage of the example application is a traditional web application where the browser fetches the HTML document from the server. The HTML code is dynamically generated and includes the number of created notes. The code snippet provided demonstrates how the HTML page is formed using a template string. The browser's role is limited to fetching HTML data, while the server handles the application logic. The example uses the Express library with Node.js to create the web server.
+
+The browser executes the JavaScript code immediately after fetching the script tag. The code parses the JSON data, creates an unordered list (ul) element, and adds list items (li) for each note's content. The formatted list is then appended to the element with the id 'notes'. The console.log command is used to output the received data in the browser's console.
+
+Event handlers and Callback functions
+
+xhttp.onreadystatechange = function() {
+  // code that takes care of the server response
+}
+
+
+xhttp.open('GET', '/data.json', true)
+xhttp.send()copy
+The purpose of this event handler is to handle the server's response when it arrives
+
+
+
+xhttp.onreadystatechange = function () {copy}
+
+The onreadystatechange event is fired whenever the readyState property of the XMLHttpRequest object changes
+Within the event handler function, there is a conditional statement that checks if the readyState is 4 and the status of the response is 200 (indicating a successful response). If both conditions are met, the code within the conditional block is executed. This is the point where the application code can handle and process the server's response.
+
+By separating the request and response handling code in this way, the code sets up an asynchronous flow. The request is sent to the server, and the JavaScript runtime continues executing other parts of the code. When the response is received and the readyState changes to 4, the event handler is triggered, and the response handling code is executed. This allows the browser to remain responsive and handle other tasks while waiting for the response from the server.
