@@ -13,8 +13,6 @@ Event handlers and Callback functions
 xhttp.onreadystatechange = function() {
   // code that takes care of the server response
 }
-
-
 xhttp.open('GET', '/data.json', true)
 xhttp.send()copy
 The purpose of this event handler is to handle the server's response when it arrives
