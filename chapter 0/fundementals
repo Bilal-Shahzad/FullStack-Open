@@ -1,5 +1,8 @@
+<!--  -->
 HTTP GET 
 The server and web browser communicate using the HTTP protocol. The Network tab in the browser shows this communication. When a page is reloaded, the console displays two events: the browser fetching the page contents from the server and downloading an image (kuva.png). The detailed view of the first event reveals that the browser successfully requested the page using the GET method and received a response with a status code of 200. The response headers provide information such as the response size and content type (HTML). The Response tab shows the HTML response, which contains a div element with a heading, a link to notes, and an img tag. The img tag triggers another HTTP request to fetch the image. The second event details the request for the image, specifying the address, request type (GET), and response details (image/png). The sequence diagram illustrates the flow of communication between the browser and server, showing the request and response sequence. The HTML page starts rendering before the image is fetched.
+<!--  -->
+
 
 Traditional Web Applications 
 The homepage of the example application is a traditional web application where the browser fetches the HTML document from the server. The HTML code is dynamically generated and includes the number of created notes. The code snippet provided demonstrates how the HTML page is formed using a template string. The browser's role is limited to fetching HTML data, while the server handles the application logic. The example uses the Express library with Node.js to create the web server.
@@ -8,6 +11,8 @@ The homepage of the example application is a traditional web application where t
 
 The browser executes the JavaScript code immediately after fetching the script tag. The code parses the JSON data, creates an unordered list (ul) element, and adds list items (li) for each note's content. The formatted list is then appended to the element with the id 'notes'. The console.log command is used to output the received data in the browser's console.
 
+
+<!--  -->
 Event handlers and Callback functions
 
 xhttp.onreadystatechange = function() {
@@ -25,3 +30,51 @@ The onreadystatechange event is fired whenever the readyState property of the XM
 Within the event handler function, there is a conditional statement that checks if the readyState is 4 and the status of the response is 200 (indicating a successful response). If both conditions are met, the code within the conditional block is executed. This is the point where the application code can handle and process the server's response.
 
 By separating the request and response handling code in this way, the code sets up an asynchronous flow. The request is sent to the server, and the JavaScript runtime continues executing other parts of the code. When the response is received and the readyState changes to 4, the event handler is triggered, and the response handling code is executed. This allows the browser to remain responsive and handle other tasks while waiting for the response from the server.
+
+<!--  -->
+Document object model 
+this is the hmtl structure 
+html
+  head
+    link
+    script
+  body
+    div
+      h1
+      div
+        ul
+          li
+          li
+          li
+      form
+        input
+        input
+
+The function of the broswer is based on the idea of seeing HTML like a tree
+
+Document object model (DOM) is an Application Programming Interface (API) that enables programttic modication of the trees that interact with web oages 
+
+THis JS code creates a node variable ul and some child nodes to it 
+var ul = document.createElement('ul')
+
+data.forEach(function(note) {
+  var li = document.createElement('li')
+
+  ul.appendChild(li)
+  li.appendChild(document.createTextNode(note.content))
+})
+
+<!--  -->
+Manipulating the document object from console
+
+you can manipulate a webpage using the Document Object Model (DOM) API. The topmost node of the DOM tree is the document object, which represents the HTML document. By accessing the document object, you can perform various operations on the webpage
+
+To add a new note to the page from the console, you can follow these steps:
+
+Get the list of notes from the page by using the getElementsByTagName method to retrieve the first ul element and assigning it to the list variable.
+
+Create a new li element using the createElement method and set its text content using the textContent property. Assign the new element to the newElement variable.
+
+Add the new li element to the list by using the appendChild method on the list variable.
+
+Executing these commands will add a new note to the list on the webpage. However, it's important to note that these changes are temporary and only exist locally in your browser. Reloading the page will revert the modifications since the JavaScript code fetched by the browser always creates the list of notes based on JSON data from the server's address.
