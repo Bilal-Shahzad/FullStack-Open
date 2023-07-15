@@ -78,3 +78,121 @@ Create a new li element using the createElement method and set its text content 
 Add the new li element to the list by using the appendChild method on the list variable.
 
 Executing these commands will add a new note to the list on the webpage. However, it's important to note that these changes are temporary and only exist locally in your browser. Reloading the page will revert the modifications since the JavaScript code fetched by the browser always creates the list of notes based on JSON data from the server's address.
+
+<!--  -->
+
+CSS
+
+HTML code includes a link tag in the head element, indicating that the browser should fetch a CSS style sheet named main.css. CSS (Cascading Style Sheets) is a language used to determine the appearance of web pages.
+The fetched main.css file contains two class selectors: .container and .notes. Class selectors are used to select specific elements on the page and apply styling rules to them.
+
+The fetched CSS file looks as follows:
+
+<!-- .container {
+  padding: 10px;
+  border: 1px solid;
+}
+
+<!-- The .container class sets a 10-pixel padding and a one-pixel solid border to elements with that class. The .notes class defines the text color as blue. -->
+
+<!--  
+.notes {
+  color: blue;
+}copy -->
+
+HTML elements can have attributes other than classes. The div element containing the notes has an id attribute, which can be used by JavaScript code to locate the element.
+
+The Elements tab in the developer console allows inspecting and modifying the styles of elements. However, any changes made in the console are temporary and not saved to the CSS file on the server. To make lasting changes, modifications need to be saved to the server-side CSS style sheet.
+
+
+<!--  -->
+Forms and HTTP POST
+
+adding a new note on the Notes page involves submitting a form. When the form's button is clicked, the browser sends an HTTP POST request to the server's "new_note" address. The server responds with an HTTP status code of 302, indicating a URL redirect to the "notes" address. This causes the browser to reload the Notes page, resulting in three additional HTTP requests for the style sheet, JavaScript code, and note data
+
+The form's action and method attributes specify that the form submission should be an HTTP POST request to the "new_note" address. The server-side code responsible for handling this request is straightforward. It receives the request, extracts the note content from the request body, creates a new note object with the content and current date, and adds it to an array called "notes". The server then redirects the browser to the "notes" address.It's important to note that the server does not save new notes to a database, so any new notes will disappear when the server is restarted.
+
+
+<!--  -->
+
+AJAX
+
+Notes page of the application follows an early-nineties style of web development and incorporates AJAX (Asynchronous JavaScript and XML) 
+
+
+
+The application's URLs, such as the one for fetching JSON data and submitting new notes, adhere to older conventions and may not align with modern RESTful API standards. Nowadays, URLs are typically structured differently and follow RESTful principles
+
+
+<!--  -->
+
+Single page app
+
+example application has a traditional home page where the server generates the HTML code, and the browser simply renders it. However, the Notes page follows a slightly different approach by utilizing AJAX and JavaScript code executed in the browser. The JavaScript code fetches notes data as JSON from the server and dynamically adds HTML elements to display the notes on the page using the DOM API.
+
+While the Notes page has some similarities to single-page applications (SPAs), it is not a full-fledged SPA. In SPAs, only one HTML page is fetched from the server, and JavaScript manipulates the content dynamically without needing to reload the entire page. However, in the example application, adding new notes still relies on the traditional form submission mechanism, where the data is sent to the server, and the server instructs the browser to reload the Notes page with a redirect.
+
+SPA approach, a separate single-page app version of the example application is available. This version uses a different JavaScript file (spa.js) and does not include the action and method attributes in the form tag. When creating a new note in the SPA version, only one HTTP POST request is sent to the server, containing the note data as JSON.
+
+code for the event handler and sending the note to the server:
+
+<!-- var form = document.getElementById('notes_form')
+form.onsubmit = function(e) {
+  e.preventDefault()
+
+  var note = {
+    content: e.target.elements[0].value,
+    date: new Date(),
+  }
+
+  notes.push(note)
+  e.target.elements[0].value = ''
+  redrawNotes()
+  sendToServer(note)
+}
+
+var sendToServer = function(note) {
+  var xhttpForPost = new XMLHttpRequest()
+  // ...
+
+  xhttpForPost.open('POST', '/new_note_spa', true)
+  xhttpForPost.setRequestHeader('Content-type', 'application/json')
+  xhttpForPost.send(JSON.stringify(note))
+}
+ -->
+
+
+
+ <!--  -->
+
+
+ JavaScript-libraries
+
+app is built using vanilla JavaScript, utilizing the DOM API to manipulate the webpage structure. However, in modern web development, libraries such as jQuery, BackboneJS, AngularJS, React, and VueJS are commonly used to simplify and enhance the manipulation of web pages.
+
+jQuery gained popularity for its cross-browser compatibility and ease of use. It provided an abstraction over the DOM API, making it easier to work with JavaScript on different browsers. But the usage has declined 
+
+BackboneJS and AngularJS emerged as popular frameworks for building single-page applications (SPAs). AngularJS became widely adopted, but the release of Angular 2 and subsequent versions led to a decline in popularity due to the lack of backward compatibility.
+
+Currently, React, developed by Facebook, is the most popular library for implementing the browser-side logic of web applications. React, along with the Redux library, is frequently used together. React's popularity remains strong, but the JavaScript ecosystem is ever-evolving, and newcomers like VueJS have been gaining attention in recent times.
+
+
+<!--  -->
+
+Full-stack web development
+
+ being able to work on all parts of a website or web application. Think of a website as a cake with different layers. Each layer has a specific job. The top layer is what you see and interact with on the screen (the frontend or browser). The bottom layer is where the data is stored and processed (the backend or server). In between, there may be a layer for storing information (the database).
+
+ Full stack developers are like bakers who can work on every layer of the cake. They can create the design and functionality that you see on the website, handle the data and logic behind the scenes, and ensure that everything works smoothly together. They might use different tools and programming languages for each layer, but the important thing is that they understand how all the layers fit together to make a complete website.
+
+
+
+<!--  -->
+
+JavaScript fatigue
+
+
+Full-stack web development can be challenging because there are many things happening at once. It's harder to find and fix problems compared to regular computer programs. JavaScript, the main language used for web development, doesn't always behave as expected, and the way it works can cause additional difficulties. Understanding the HTTP protocol is necessary for communication on the web. You also need to know about databases and server administration, as well as some CSS for making things look good.
+
+The JavaScript world is constantly changing, which can make things even more challenging. Tools, libraries, and the language itself are always being updated. Some people find this constant change tiring, and they call it "JavaScript fatigue."
+
