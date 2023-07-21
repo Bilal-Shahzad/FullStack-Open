@@ -42,3 +42,13 @@ const Hello1 = (props) => {
     )
   }
   
+//   Here's how it works:
+
+// The Hello component takes some props, such as the person's name and age.
+
+// Inside the component, there's a helper function called bornYear that calculates the year of birth based on the current year and the person's age.
+
+// When the component is rendered, it displays a greeting with the person's name and age, and then uses the bornYear function to make an educated guess about the year the person was born.
+
+// The neat thing is that the helper function can access the props directly without needing them as parameters. This is because JavaScript allows us to define functions within other functions, making it a common technique in JavaScript programming.
+
