@@ -1,0 +1,58 @@
+<!-- Creating and nesting components  -->
+Reacts made out of components - 
+Compoonents are UI that has its own logic and apperance 
+Components can be a small button or as big as a page 
+
+React components are JS functions that return markup 
+
+Ex:
+function MyButton() {
+    return (
+        <button> I'm a button </button>
+
+    ):
+}
+Now that MyButton has been declared we can nest it into another component- 
+
+export default function MyApp() {
+  return (
+    <div>
+      <h1>Welcome to my app</h1>
+      <MyButton />
+    </div>
+  );
+}
+MyButton starts with a capital letter that is how you know its a react component 
+They asll start will capital letters while HTML tags will be lower case 
+
+function MyButton() {
+  return (
+    <button>
+      I'm a button
+    </button>
+  );
+}
+export default function MyApp() {
+  return (
+    <div>
+      <h1>Welcome to my app</h1>
+      <MyButton />
+    </div>
+  );
+}
+Export defualt keywords specify the mian component in file
+
+<!-- Writing markup with JSX  -->
+
+the markup syntax us optional but most react projects use JSX for convenience.
+
+JSX is stricter than html 
+Your component also cant return multiple JSX and have to have a shared parent like div or an empty wrapper -
+function AboutPage() {
+  return (
+    <>
+      <h1>About</h1>
+      <p>Hello there.<br />How do you do?</p>
+    </>
+  );
+}
