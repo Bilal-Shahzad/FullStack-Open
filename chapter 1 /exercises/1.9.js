@@ -33,6 +33,8 @@ const App = () => {
     }
   };
 
+  const feedbackGiven = good + neutral + bad > 0;
+
   return (
     <div>
       <h1>Customer Feedback</h1>
@@ -40,10 +42,11 @@ const App = () => {
       <button onClick={() => handleFeedback('neutral')}>Neutral</button>
       <button onClick={() => handleFeedback('bad')}>Bad</button>
 
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      {feedbackGiven && <Statistics good={good} neutral={neutral} bad={bad} />}
+      {feedbackGiven || <p>No feedback given yet.</p>}
     </div>
   );
 };
 
 export default App;
-// Statistics component takes the feedback counts good, neutral, bad
+// In this modified code, the feedbackGiven variable is used to determine whether any feedback has been provided. The Statistics component is conditionally rendered using the && operator only if feedbackGiven is true
