@@ -160,28 +160,27 @@
 
 
 const App = () => {
-    // const-definitions 
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  const Header = 'Half Stack application development'
+  const Content1 = 'Fundamentals of React'
+  const Total1 = 10
+  const Content2 = 'Using props to pass data'
+  const Total2 = 7
+  const Content3 = 'State of a component'
+  const Total3 = 14
 
   return (
     <div>
-      <h1>{course}</h1>
+      <h1>{Header}</h1>
       <p>
-        {part} {exercises}
+        {Content1} {Total1}
       </p>
       <p>
-        {part} {exercises}
+        {Content2} {Total2}
       </p>
       <p>
-        {part} {exercises}
+        {Content3} {Total3}
       </p>
-      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
+      <p>Number of exercises {Total1 + Total2 + Total3}</p>
     </div>
   )
 }
