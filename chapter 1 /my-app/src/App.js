@@ -35,6 +35,24 @@ const Total = ({ parts }) => {
 };
 
 const App = () => {
+  const [clicks, setClicks] = useState({
+    left: 0, right: 0
+  })
+
+  const handleLeftClick = () => {
+    const newClicks = { 
+      left: clicks.left + 1, 
+      right: clicks.right 
+    }
+    setClicks(newClicks)
+  }
+  const handleRightClick = () => {
+    const newClicks = { 
+      left: clicks.left, 
+      right: clicks.right + 1 
+    }
+    setClicks(newClicks)
+  }
   const course = {
     name: 'Half Stack application development',
     parts: [
@@ -58,6 +76,11 @@ const App = () => {
       <Header course={course} />
       <Content parts={course.parts} />
       <Total parts={course.parts} />
+      {/* component gets access to functions setLeft and right that it can use to update two pieces  */}
+      {clicks.left}
+      <button onClick={handleLeftClick}>left</button>
+      <button onClick={handleRightClick}>right</button>
+      {clicks.right}
     </div>
   );
 };

@@ -518,3 +518,392 @@ const App = () => {
 };
 
 
+
+
+
+
+
+
+<---- Part 1c ------> 
+
+Managing State with Event Handlers:
+The component now contains a single piece of state called clicks, and the event handlers handleLeftClick and handleRightClick are responsible for updating the state based on button clicks.
+
+Updating State with Object Spread Syntax:
+Initially, the event handlers update the state using the object spread syntax. This involves creating a new object that includes all properties of the previous state and modifying the relevant property. The updated object is then passed to setClicks to update the state.
+
+jsx
+const handleLeftClick = () =>
+  setClicks({ ...clicks, left: clicks.left + 1 });
+
+const handleRightClick = () =>
+  setClicks({ ...clicks, right: clicks.right + 1 });
+Avoiding Direct State Mutation:
+It's emphasized that direct mutation of state is forbidden in React, as it can lead to unexpected side effects. State updates should always involve creating a new object to represent the updated state. This is to ensure the predictability and reliability of state management in a React application.
+
+jsx
+const handleLeftClick = () => {
+  clicks.left++; // Avoid this - direct mutation
+  setClicks(clicks);
+};
+Single State Object vs. Separate State:
+While the example uses a single state object for the click counters, it's pointed out that in this specific case, separating state into individual pieces (leftClicks and rightClicks) is more suitable and less complex. The choice of how to structure state depends on the application's needs and complexity.
+
+Guidance on State Management:
+The concept of storing state in complex data structures is briefly introduced. The official React documentation is recommended as a valuable resource for further understanding state management and making appropriate decisions.
+
+Storing Click History with Arrays:
+A new piece of state named allClicks is added to the application using the useState hook. This state will keep track of all the clicks that have occurred in the application.
+const [allClicks, setAll] = useState([]);
+
+
+Updating Click History on Click:
+When the left or right button is clicked, a letter ('L' for left, 'R' for right) is added to the allClicks array using the concat method. This method creates a new array that includes the new click and all previous clicks.
+const handleLeftClick = () => {
+  setAll(allClicks.concat('L'));
+  setLeft(left + 1);
+}
+
+const handleRightClick = () => {
+  setAll(allClicks.concat('R'));
+  setRight(right + 1);
+}
+
+
+Rendering Click History:
+The rendered JSX now includes a paragraph (<p>) element that displays the history of all clicks. The join method is used to concatenate the elements of the allClicks array into a single string, separated by spaces.
+<p>{allClicks.join(' ')}</p>
+
+
+
+Avoiding Direct Array Mutation:
+It's highlighted that directly mutating the allClicks array and then updating the state with the mutated array is not recommended. The concat method is preferred, as it creates a new array without modifying the original.
+// Avoid this approach
+allClicks.push('L');
+setAll(allClicks);
+
+
+Adding Total Button Presses State:
+A new piece of state named total is introduced to keep track of the total number of button presses. It's initialized to 0 using the useState hook.
+const [total, setTotal] = useState(0);
+
+
+Updating Total on Button Clicks:
+The handleLeftClick and handleRightClick event handlers are modified to update the total state based on the sum of left and right button presses.
+const handleLeftClick = () => {
+  setAll(allClicks.concat('L'));
+  const updatedLeft = left + 1;
+  setLeft(updatedLeft);
+  setTotal(updatedLeft + right);
+}
+
+const handleRightClick = () => {
+  setAll(allClicks.concat('R'));
+  const updatedRight = right + 1;
+  setRight(updatedRight);
+  setTotal(left + updatedRight);
+}
+
+
+Understanding Asynchronous State Updates:
+The issue arises from the asynchronous nature of state updates in React. When you call setLeft(left + 1), the actual state update may not happen immediately, causing discrepancies in calculations.
+
+
+Resolution - Using Intermediate Variables:
+To ensure accurate calculations, intermediate variables (updatedLeft and updatedRight) are introduced to capture the incremented values before updating the state. These intermediate values are then used to calculate the total state.
+const updatedLeft = left + 1;
+setLeft(updatedLeft);
+setTotal(updatedLeft + right);
+
+
+Introduction of History Component:
+The application is modified to include a new History component. This component displays the clicking history based on whether any buttons have been clicked or not. If no clicks have occurred, it displays an instructional message. Otherwise, it displays the button press history using the join method.
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
+
+
+
+Usage of Button Component:
+The application now utilizes the Button component that was defined earlier. This simplifies the rendering of buttons and improves code reusability.
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+
+
+Integration of History and Button Components:
+The App component is updated to use the Button component for rendering buttons. The handleLeftClick and handleRightClick event handlers are connected to the respective buttons using the handleClick prop.
+const App = () => {
+  // ...
+
+  return (
+    <div>
+      {left}
+      <Button handleClick={handleLeftClick} text='left' />
+      <Button handleClick={handleRightClick} text='right' />
+      {right}
+      <History allClicks={allClicks} />
+    </div>
+  )
+}
+
+
+State Hook and Introduction of Hooks:
+The State Hook, introduced in React version 16.8.0, allows functional components to manage state, a feature previously exclusive to class components. Hooks provide a way to add stateful behavior to functional components, promoting a more intuitive and modular way of developing applications.
+
+
+Course Approach:
+The course you're referencing takes a radical approach by exclusively teaching hooks right from the start. This decision is made to ensure that learners are exposed to the latest and future variations of React, reflecting modern best practices in the React ecosystem.
+
+
+Functional Components and Legacy Code:
+While functional components are the future of React, it's still valuable to understand class components. There is a significant amount of legacy React code written using class components, and learning about them is essential for maintaining and understanding existing projects.
+
+
+Importance of Learning Both Approaches:
+Despite the shift towards functional components and hooks, understanding class components is important for several reasons. Legacy codebases, existing documentation, and examples on the internet may use class components, so having familiarity with both approaches allows developers to work effectively in different contexts
+
+
+Keeping the Developer Console Open:
+It's recommended to always keep the browser's developer console open while working on your React application. The Console tab is particularly important for viewing logs and debugging information.
+
+
+Debugging with console.log:
+Console logging is a traditional debugging technique. To debug components, you can log variables and values to the console. It's advised to separate log items with commas, not the plus operator, to improve readability and effectiveness.
+
+
+Using the Debugger Command:
+You can pause the execution of your application code by inserting the debugger command anywhere in your code. This will trigger a breakpoint in the Chrome developer console's debugger, allowing you to inspect variables and the current state of your application.
+
+
+Inspecting Variables in Debugger:
+Once the execution is paused, you can inspect the current state of variables in the Console tab of the developer console. This helps you analyze the state of your application at a specific point in time.
+
+
+Debugging Line by Line:
+The Sources tab in the Chrome developer console allows you to execute your code line by line using the controls on the right-hand side. This can be useful for stepping through your code and identifying issues.
+
+
+Adding Breakpoints:
+You can set breakpoints in the Sources tab to pause execution at specific lines of code. This allows you to examine variables and the program's state when the breakpoint is hit.
+
+
+React Developer Tools Extension:
+Installing the React Developer Tools extension for Chrome is highly recommended. It adds a Components tab to the developer tools, allowing you to inspect React elements, their props, and state. The extension is particularly useful for tracking the state of React hooks.
+
+
+Inspecting React Hook State:
+The React Developer Tools extension displays the state of hooks in the order they are defined. You can easily see the values of different hook states, such as useState, and understand their current values.
+
+
+Call Location Restrictions:
+The useState (as well as other hooks like useEffect) function should only be called from inside the function body that defines a React component. It should not be called from within a loop, a conditional expression, or any other place that is not directly within the component function.
+
+
+Consistent Hook Ordering:
+Hooks must always be called in the same order within the component function. Inconsistent ordering can lead to unexpected and erratic behavior in your application.
+
+
+Example of Correct Usage:
+Hooks like useState can be used directly within the function body of the component, as shown in the example:
+const App = () => {
+  const [age, setAge] = useState(0)
+  const [name, setName] = useState('Juha Tauriainen')
+
+  // ...
+  
+  return (
+    //...
+  )
+}
+
+
+Examples of Incorrect Usage:
+The text provides examples of incorrect usage, such as calling useState inside a loop, a conditional expression, or a separate function:
+if (age > 10) {
+  // Incorrect: calling useState inside a conditional expression
+  const [foobar, setFoobar] = useState(null)
+}
+for (let i = 0; i < age; i++) {
+  // Incorrect: calling useState inside a loop
+  const [rightWay, setRightWay] = useState(false)
+}
+const notGood = () => {
+  // Incorrect: calling useState inside a separate function
+  const [x, setX] = useState(-1000)
+}
+
+
+Event Handlers and Function References:
+Event handlers in React must always be functions or references to functions. Strings, variable assignments, or function calls as event handlers will not work. For example, the following won't work:
+// Incorrect examples
+<button onClick="crap...">button</button>
+<button onClick={value + 1}>button</button>
+<button onClick={value = 0}>button</button>
+
+
+Defining Inline Event Handlers:
+Event handlers can be defined directly in the attribute of the element using arrow function syntax. For example:
+<button onClick={() => setValue(0)}>button</button>
+
+
+Defining Event Handlers Separately:
+It's common to define event handler functions separately and then reference them in the component. This can make the code more organized and readable. For example:
+const App = () => {
+  const [value, setValue] = useState(10)
+  const handleClick = () => {
+    console.log('clicked the button')
+    setValue(0)
+  }
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+
+
+Handling Multiple Commands:
+Event handler functions can contain multiple commands. Use the curly brace syntax for arrow functions in such cases. For example:
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const handleClick = () => {
+    console.log('clicked the button')
+    setValue(0)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+
+
+Function Returning a Function:
+Event handlers can be defined by a function that returns another function. This pattern allows for customization of the event handler's behavior based on parameters.
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => () => {
+    console.log('value now', newValue)
+    setValue(newValue)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={setToValue(1000)}>thousand</button>
+      <button onClick={setToValue(0)}>reset</button>
+      <button onClick={setToValue(value + 1)}>increment</button>
+    </div>
+  )
+}
+
+
+Custom Event Handlers:
+By using functions that return functions, you can create custom event handlers that capture specific behavior. In the example above, the setToValue function returns a new function that sets the state to a given value and logs the change.
+
+
+Compact Arrow Function Syntax:
+The syntax of functions returning functions can be made more compact using arrow functions. The earlier verbose definition of hello function is simplified step by step:
+// Original
+const hello = (who) => () => {
+  console.log('hello', who)
+}
+
+// Compact arrow function syntax
+const hello = (who) => () => console.log('hello', who)
+
+
+Choosing Between Approaches:
+Whether to use functions returning functions or inline arrow functions for event handlers is a matter of personal preference. Both approaches achieve the same functionality. The decision may depend on code readability and maintainability.
+// Using functions returning functions
+<button onClick={setToValue(1000)}>thousand</button>
+<button onClick={setToValue(0)}>reset</button>
+// Using inline arrow functions
+<button onClick={() => setToValue(1000)}>thousand</button>
+<button onClick={() => setToValue(0)}>reset</button>
+
+
+Performance Implications:
+When using functions returning functions for event handlers, keep in mind that a new function instance is created every time the component renders. While this may not cause noticeable performance issues in most cases, it's something to be aware of, especially in components that re-render frequently.
+
+
+Passing Arguments to Event Handlers:
+You can also pass arguments to event handlers using functions returning functions. For example:
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const addToValue = (amount) => () => {
+    setValue(value + amount)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={addToValue(5)}>Add 5</button>
+      <button onClick={addToValue(10)}>Add 10</button>
+    </div>
+  )
+}
+
+
+Caching Event Handlers:
+When using functions returning functions, it's important to note that a new event handler function is created every time the component renders. This can lead to unnecessary re-renders of child components. To avoid this, you can use the useCallback hook to cache the event handler function.
+import React, { useState, useCallback } from 'react';
+
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const addToValue = useCallback((amount) => () => {
+    setValue(value + amount)
+  }, [value])
+
+  return (
+    <div>
+      {value}
+      <button onClick={addToValue(5)}>Add 5</button>
+      <button onClick={addToValue(10)}>Add 10</button>
+    </div>
+  )
+}
+
+
+Code Organization:
+While functions returning functions can be powerful, it's important to strike a balance between abstraction and readability. In some cases, using inline arrow functions for event handlers may be simpler and more straightforward, especially for small and simple components.
+
+
+Using bind:
+Instead of using functions returning functions, you can achieve a similar result by using the bind method. For example:
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const addToValue = (amount) => {
+    setValue(value + amount)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={addToValue.bind(null, 5)}>Add 5</button>
+      <button onClick={addToValue.bind(null, 10)}>Add 10</button>
+    </div>
+  )
+}
