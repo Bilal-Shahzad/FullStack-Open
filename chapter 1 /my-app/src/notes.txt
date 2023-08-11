@@ -907,3 +907,66 @@ const App = () => {
     </div>
   )
 }
+
+
+
+
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+);
+
+const App = () => {
+  const [value, setValue] = useState(10);
+
+  const setToValue = (newValue) => () => {
+    console.log('value now', newValue);
+    setValue(newValue);
+  };
+
+  return (
+    <div>
+      {value}
+      <Button handleClick={setToValue(1000)} text="thousand" />
+      <Button handleClick={setToValue(0)} text="reset" />
+      <Button handleClick={setToValue(value + 1)} text="increment" />
+    </div>
+  );
+};
+By using button, the button rednering logic and event handling making the appp componnetns code more focuse on the main function 
+
+
+
+
+const Display = (props) => <div>{props.value}</div>;
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+);
+
+const App = () => {
+  const [value, setValue] = useState(10);
+
+  const setToValue = (newValue) => {
+    console.log('value now', newValue);
+    setValue(newValue);
+  };
+
+  return (
+    <div>
+      <Display value={value} />
+      <Button handleClick={() => setToValue(1000)} text="thousand" />
+      <Button handleClick={() => setToValue(0)} text="reset" />
+      <Button handleClick={() => setToValue(value + 1)} text="increment" />
+    </div>
+  );
+};
+By organizing your components this way, following a more maintainable and scalable structure that aligns with react's best practices.
+
+
+
+
