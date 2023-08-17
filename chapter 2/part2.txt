@@ -1,0 +1,168 @@
+ Introduction to Storing Notes in State
+In this part, the useState hook is introduced to manage the state of the notes in the App component. The useState hook is used to initialize a piece of state with the initial notes array passed in the props.
+
+import { useState } from 'react'
+import Note from './components/Note'
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+
+  return (
+    <div>
+      {/* ... */}
+    </div>
+  )
+}
+
+export default App;
+
+
+ Adding a Note and Handling Form Submission
+
+In this part, an HTML form is added to the App component for adding new notes. The addNote function is implemented as an event handler for the form submission. event.preventDefault() is used to prevent the default form submission behavior, and the console.log statement logs the target of the event.
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+
+  const addNote = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+  }
+
+  return (
+    <div>
+      {/* ... */}
+      <form onSubmit={addNote}>
+        <input />
+        <button type="submit">save</button>
+      </form>   
+    </div>
+  )
+}
+
+ Accessing Form Input Data
+
+In this part, the goal is to access the data contained in the form's input element. The handleNoteChange function is introduced as an onChange event handler for the input element. It updates the newNote state whenever the input value changes.
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('');
+
+  const handleNoteChange = (event) => {
+    setNewNote(event.target.value);
+  }
+
+  const addNote = (event) => {
+    event.preventDefault();
+    // ...
+  }
+
+  return (
+    <div>
+      {/* ... */}
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>   
+    </div>
+  )
+}
+
+
+ Adding New Notes to State
+
+In this part, the addNote function is extended to create a new note object and append it to the notes state. The newNote state is then cleared to reset the input field after adding a note.
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('');
+
+  const handleNoteChange = (event) => {
+    setNewNote(event.target.value);
+  }
+
+  const addNote = (event) => {
+    event.preventDefault();
+
+    const noteObject = {
+      content: newNote,
+      date: new Date().toISOString(),
+      important: Math.random() < 0.5,
+      id: notes.length + 1,
+    };
+
+    setNotes(notes.concat(noteObject));
+    setNewNote('');
+  }
+
+  return (
+    <div>
+      {/* ... */}
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>   
+    </div>
+  )
+}
+
+
+nitializing the Input
+
+A new state variable, newNote, is introduced using the useState hook. This state variable will be used to store the user-submitted input. The input element's value attribute is set to the newNote state, which initially displays a placeholder text in the input field.
+const [newNote, setNewNote] = useState('a new note...');
+
+
+
+Handling Input Changes
+
+An onChange event handler, handleNoteChange, is registered for the input element. This event handler updates the newNote state whenever the input value changes. As a result, the input field becomes a controlled component, and React manages its value.
+const handleNoteChange = (event) => {
+  setNewNote(event.target.value);
+}
+
+
+Completing Form Submission
+
+The addNote function is extended to create a new note object and add it to the notes state. The input value from the newNote state is used as the content of the new note. The new note is then added to the notes array using the concat method, and the newNote state is reset to an empty string to clear the input field.
+const addNote = (event) => {
+  event.preventDefault();
+
+  const noteObject = {
+    content: newNote,
+    important: Math.random() < 0.5,
+    id: notes.length + 1,
+  };
+
+  setNotes(notes.concat(noteObject));
+  setNewNote('');
+}
+
+
+By utilizing controlled components, the input element's value is directly tied to React state. This ensures that the UI and the component's state are always in sync, making it easier to manage and manipulate user input.
+
+
+
+
+Adding State for Filtering
+
+A new state variable, showAll, is introduced using the useState hook. This state variable keeps track of whether all notes should be displayed (true) or only important notes should be displayed (false).
+const [showAll, setShowAll] = useState(true);
+
+
+const [showAll, setShowAll] = useState(true);
+The notesToShow variable is introduced to determine which notes should be displayed based on the value of the showAll state. If showAll is true, all notes are displayed; if showAll is false, only important notes are displayed. Filtering is done using the filter method on the notes array.
+const notesToShow = showAll
+  ? notes
+  : notes.filter(note => note.important);
+
+
+
+User Interface for Toggling Filtering
+
+A button is added to the user interface to toggle the value of the showAll state. The button's text changes dynamically based on the value of showAll, indicating whether the displayed notes are "important" or "all". The onClick event handler toggles the value of showAll.
+<button onClick={() => setShowAll(!showAll)}>
+  show {showAll ? 'important' : 'all' }
+</button>
+
+By clicking the button, users can easily switch between viewing all notes and viewing only important notes. The filtering mechanism enhances user experience and provides a convenient way to focus on specific types of notes.
+
