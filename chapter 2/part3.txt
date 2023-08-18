@@ -1,0 +1,295 @@
+import React from 'react';
+// import Bilal from './blank'; 
+// function throwaway() {
+//   return (
+//     <div>
+//       <h1>Welcome to My App</h1>
+//       <Bilal > </Bilal>
+//     </div>
+//   );
+// }
+// export default throwaway;
+
+
+
+const Filter = ({ searchTerm, handleSearchChange }) => {
+  return (
+    <div>
+      filter shown with <input value={searchTerm} onChange={handleSearchChange} />
+    </div>
+  );
+};
+
+const PersonForm = ({ newName, newNumber, handleNameChange, handleNumberChange, addPerson }) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input value={newName} onChange={handleNameChange} />
+      </div>
+      <div>
+        number: <input value={newNumber} onChange={handleNumberChange} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  );
+};
+
+const Persons = ({ personsToShow }) => {
+  return (
+    <ul>
+      {personsToShow.map((person) => (
+        <li key={person.id}>
+          {person.name} - {person.number}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '123-456-7890', id: 1 },
+    { name: 'Ada Lovelace', number: '111-222-3333', id: 2 },
+    { name: 'Dan Abramov', number: '444-555-6666', id: 3 },
+    { name: 'Mary Poppendieck', number: '777-888-9999', id: 4 }
+  ]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const addPerson = (event) => {
+    event.preventDefault();
+
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`);
+      return;
+    }
+
+    const personObject = {
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
+    };
+
+    setPersons(persons.concat(personObject));
+    setNewName('');
+    setNewNumber('');
+  };
+
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const personsToShow = persons.filter((person) =>
+    person.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+      <h3>Add a new</h3>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addPerson={addPerson}
+      />
+      <h3>Numbers</h3>
+      <Persons personsToShow={personsToShow} />
+    </div>
+  );
+};
+
+export default App;
+
+
+
+// 2.6
+// using usestate to make the persons array and the newName innput
+// defined two event addPerson and handleNameChange for updating newName 
+
+
+// 2.7
+// use the some method to check if there is a matching name in the persons array 
+
+// 2.8
+// newNumber to manage the phone number input 
+// handleNumberZChange that updates newNumber as the peron types 
+
+
+// 2.9
+// searchTerm to manage the search input field 
+// added handleSearchChange that updates searchTerm 
+
+// 2.10
+// Filter, PersonForm and Persons got extracted from App 
+
+
+
+
+
+Asynchronous Model and IO Operations:
+JavaScript engines, like those in browsers, follow an asynchronous programming model.
+IO operations, such as fetching data from a server or reading files, are executed as non-blocking operations. This means that code execution continues immediately after calling an IO function, without waiting for it to complete.
+
+Event Handling:
+JavaScript engines register event handlers for asynchronous operations.
+When an asynchronous operation is completed (or at a later point), the event handler associated with that operation is called by the JavaScript engine.
+
+Single-Threaded Nature:
+Current JavaScript engines are single-threaded, meaning they can't execute code in parallel.
+Using a non-blocking model for IO operations is essential to prevent the browser from freezing or becoming unresponsive.
+
+
+
+Responsiveness and Long Computations:
+For the browser to remain responsive to user interactions, no single computation should take too long.
+Long-running computations can cause the browser to become unresponsive, impacting user experience.
+
+Web Workers:
+Modern browsers allow running parallelized code through web workers.
+Web workers enable background threads for computationally intensive tasks, but the event loop of an individual browser window is still managed by a single thread.
+
+Web Resources for Further Learning:
+The explanation suggests watching Philip Roberts' keynote, "What the heck is the event loop anyway?", for a deeper understanding of event loops and asynchronous programming.
+
+setTimeout(() => {
+  console.log('loop..')
+  let i = 0
+  while (i < 50000000000) {
+    i++
+  }
+  console.log('end')
+}, 5000)
+
+
+Introduction to npm and External Libraries:
+npm (node package manager) is commonly used to manage dependencies in JavaScript projects.
+Modern JavaScript projects, including those created with Vite, typically use npm to define and manage project dependencies.
+
+Adding axios Library:
+axios is a promise-based library for making HTTP requests.
+axios offers a more pleasant API for making requests compared to the standard fetch method.
+To add axios to a project, run the following command in the project's root directory:
+npm install axios
+
+
+Adding json-server for Development:
+json-server is a tool used during development to create a mock REST API based on a JSON file.
+Install json-server as a development dependency by running the following command:
+npm install json-server --save-dev
+
+
+Update the "scripts" section in the package.json file to include a script to start the json-server:
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+  "preview": "vite preview",
+  "server": "json-server -p3001 --watch db.json"
+}
+
+
+Starting json-server:
+Use the command npm run server to start the json-server. This command starts the server on port 3001 and watches the db.json file for changes.
+Remember to terminate any previously started json-server instances before starting a new one to avoid port conflicts.
+
+Difference Between Runtime and Development Dependencies:
+Dependencies installed using npm install can be categorized as runtime or development dependencies.
+axios was installed as a runtime dependency because the application requires it for execution.
+json-server was installed as a development dependency (--save-dev) because it's used for assistance during software development but not required for the application to run.
+
+
+Using Axios and Promises:
+Axios is a promise-based library for making HTTP requests, offering a more pleasant API compared to fetch.
+To use Axios, import it into your project using an appropriate import statement.
+Example of using Axios to make an HTTP GET request and working with promises:
+import axios from 'axios'
+
+const promise = axios.get('http://localhost:3001/notes')
+console.log(promise)
+
+promise.then(response => {
+  console.log(response)
+})
+
+// Chaining Axios method call with the .then method
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  console.log(notes)
+})
+
+
+Promise States and Handling Responses:
+A promise represents the eventual completion or failure of an asynchronous operation.
+Promises have three states: pending, fulfilled (resolved), and rejected.
+Axios' get method returns a promise.
+Use the .then method to register an event handler to a promise and access the response data:
+axios.get('http://localhost:3001/notes').then(response => {
+  console.log(response.data)
+})
+
+
+Chaining Method Calls:
+Chaining method calls allows for a more concise code structure:
+axios.get('http://localhost:3001/notes')
+  .then(response => {
+    const notes = response.data
+    console.log(notes)
+  })
+
+
+Fetching Data and Rendering in Components:
+It's possible to fetch data from a server and render it within a React component.
+The fetched data can be passed as props to the component:
+import ReactDOM from 'react-dom/client'
+import axios from 'axios'
+import App from './App'
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  ReactDOM.createRoot(document.getElementById('root')).render(<App notes={notes} />)
+})
+
+
+Handling Data Fetching within Components:
+While it's possible to fetch data outside of a component, a better approach is to fetch data within the component itself.
+Determine where the axios.get command should be placed within the component to fetch data efficiently.
+
+
+Application Configuration:
+The configuration of the React application has become more complex as development progressed.
+The application code runs in the browser and is provided by the React development server.
+The React development server is launched using the npm start command.
+
+
+React Dev Server:
+The React development server processes the application's JavaScript code.
+It transforms the JavaScript into a browser-understandable format and bundles JavaScript files into a single file.
+The dev server plays a crucial role in the development workflow.
+
+
+Fetching Data from json-server:
+The React application, running in the browser, fetches JSON-formatted data from a server.
+The server, named json-server, runs on port 3001 on the local machine.
+json-server obtains its data from a JSON file named db.json.
+
+
+Local Development Environment:
+During development, all parts of the application (React app, json-server, db.json) reside on the developer's machine (localhost).
+
+
+Deployment and Future Steps:
+While currently on localhost, the application will eventually be deployed to the internet in part 3 of the course.
+Deployment involves making the application accessible to users over the internet.

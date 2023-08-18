@@ -1,0 +1,3 @@
+understand use state and how it works 
+
+creata a empty page add a component and import tthat page into .js file 
