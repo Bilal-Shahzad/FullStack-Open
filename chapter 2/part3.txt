@@ -293,3 +293,6 @@ During development, all parts of the application (React app, json-server, db.jso
 Deployment and Future Steps:
 While currently on localhost, the application will eventually be deployed to the internet in part 3 of the course.
 Deployment involves making the application accessible to users over the internet.
+
+
+
