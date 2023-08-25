@@ -142,3 +142,105 @@ export default App;
 
 
 <----- Notes ---- >
+Resources and URLs: 
+In REST, each data object is referred to as a resource and is associated with a unique URL. For example, the URL notes/3 would represent the resource with an ID of 3, assuming we are dealing with notes.Resources and URLs: In REST, each data object is referred to as a resource and is associated with a unique URL. For example, the URL notes/3 would represent the resource with an ID of 3, assuming we are dealing with notes.
+
+HTTP Methods: 
+HTTP methods are used to interact with resources. The GET method is used to fetch resources. For instance, an HTTP GET request to notes/3 would retrieve the note with ID 3. A GET request to the notes URL would retrieve a list of all notes.
+
+Creating Resources: 
+To create a new resource, you make an HTTP POST request to the collection URL, such as notes. The new resource's data is sent in the body of the request. This adheres to the REST convention.
+
+JSON Format: 
+JSON Server requires data to be sent in JSON format. This means the data should be a properly formatted JSON string. Additionally, the request should include the Content-Type header with the value application/json.
+
+
+
+<--- Sending Data to Server ---->
+A new note object is crafted, excluding the ID property to enable the server to generate IDs.
+
+The axios.post method is utilized to send the note object to the server at the provided URL.
+
+The server's response is logged to the console. The newly generated note is accessible through the response.data property.
+
+The Network tab in Chrome developer tools can be employed to examine HTTP requests, ensuring header and payload accuracy.
+
+The axios library automatically configures the Content-Type header as application/json since the sent data is in JavaScript object format.
+
+The server's response is insightful for confirming data accuracy and any potential modifications made on the server's end.
+
+To update the application's state with the recently created note, apply the setNotes function to append the response data to the existing notes using concat. Additionally, reset the note creation form by assigning an empty value to newNote.
+
+It's imperative to remember that when manipulating state, such as using concat, a new instance of the list is produced, preserving immutability.
+
+Challenges in debugging emerge from the asynchronous nature of communication. A deep comprehension of JavaScript runtime and React components is indispensable for effective debugging.
+
+Examining the state of the backend server, usually via the browser, aids in validating data sent and received during interactions.
+
+In upcoming segments of the course, the implementation of backend logic will be explored. While tools like Postman assist in debugging server applications, the current focus remains on browser inspection of the json-server state.
+
+addNote = event => {
+  event.preventDefault()
+  const noteObject = {
+    content: newNote,
+    important: Math.random() < 0.5,
+  }
+
+  axios
+    .post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      console.log(response)
+    })
+}
+
+addNote = event => {
+  event.preventDefault()
+  const noteObject = {
+    content: newNote,
+    important: Math.random() > 0.5,
+  }
+
+  axios
+    .post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      setNotes(notes.concat(response.data))
+      setNewNote('')
+    })
+}
+This condensed version encapsulates the key aspects of sending data to the server and managing the server's feedback, along with the pertinent code snippets.
+
+
+
+<---- Changing the importance of Notes ----->
+
+Modifying the Note Component:
+Update the Note component to include a button for toggling note importance.
+Set the button's event handler to the toggleImportance function passed via props.
+The button's label reflects the current importance status.
+
+Defining toggleImportanceOf in App Component:
+In the App component, establish an initial version of the toggleImportanceOf event handler.
+This function toggles the importance status of a note based on its unique ID.
+
+Implementation in Note Component:
+In the Note component, assign the toggle button's event handler to call toggleImportanceOf with the note's ID.
+This allows for toggling importance when the button is clicked.
+
+Details of toggleImportanceOf Function:
+Construct the note's URL using its ID and send a PUT request to the server.
+Retrieve the note to modify and create a new object with the importance status flipped.
+Upon successful response, update the app's state using the response data to replace the modified note.
+
+Reiteration of Previously Summarized Points:
+Highlighted the importance of sending data to the server and receiving responses.
+Discussed REST concepts, resource URLs, and HTTP methods (GET, POST, PUT) used for communication.
+Emphasized JSON format requirement, proper use of the Content-Type header, and examining requests and responses in developer tools.
+Showcased the use of template strings for dynamic strings.
+Clarified the distinction between shallow and deep copies for object manipulation.
+Underlined the significance of state management through immutability and React component debugging strategies.
+Noted the value of inspecting the backend server's state through the browser.
+
+
+
+<--- Extracting Communication with the Backend into a Separate Module --->
+
