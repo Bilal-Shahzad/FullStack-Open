@@ -1,3 +1,9 @@
-understand use state and how it works 
+understand use state and how it works :
+hook that allows to update
+
+
+how it works 
+import it, declare a variable the function takes values and returns an array to the updated state 
+
 
 creata a empty page add a component and import tthat page into .js file 
