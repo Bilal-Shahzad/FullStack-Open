@@ -506,3 +506,59 @@ It ensures that requests are made at the right times and avoids unnecessary call
 Task-specific Use of useEffect:
 Not all tasks require the use of useEffect, and alternative approaches can be employed.
 The decision to use useEffect depends on the specific requirements of the task.
+
+
+Tasks 2.18.-2.20
+
+Step 1: Modify the User Interface
+<ul id="countryList">
+  <li>
+    <span class="countryName">Country Name</span>
+    <button class="viewDetailsBtn">View Details</button>
+  </li>
+</ul>
+
+
+Step 2: Dynamically Generate Country List
+
+const countries = [...]; // Populate this with your API data
+
+const countryList = document.getElementById('countryList');
+
+countryList.innerHTML = '';
+
+countries.forEach(country => {
+  const listItem = document.createElement('li');
+  
+  const countryName = document.createElement('span');
+  countryName.classList.add('countryName');
+  countryName.textContent = country.name;
+
+  const viewDetailsBtn = document.createElement('button');
+  viewDetailsBtn.classList.add('viewDetailsBtn');
+  viewDetailsBtn.textContent = 'View Details';
+  viewDetailsBtn.addEventListener('click', () => {
+    // Handle click event to navigate to the country view
+    // You can implement this navigation logic here
+  });
+
+  listItem.appendChild(countryName);
+  listItem.appendChild(viewDetailsBtn);
+  countryList.appendChild(listItem);
+});
+
+
+fetch(weatherApiUrl)
+  .then((response) => response.json())
+  .then((data) => {
+    // Extract weather data and update the UI
+    const temperature = data.main.temp;
+    const weatherDescription = data.weather[0].description;
+
+    // Update the UI with the weather information (e.g., temperature and description)
+    const weatherInfoElement = document.getElementById('weatherInfo');
+    weatherInfoElement.innerHTML = `Temperature: ${temperature}°C, Weather: ${weatherDescription}`;
+  })
+  .catch((error) => {
+    console.error('Error fetching weather data:', error);
+  });
