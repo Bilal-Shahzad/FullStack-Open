@@ -1,0 +1,212 @@
+Initialize the Project:
+Use npm init to create a package.json file.
+Set the entry point to index.js.
+Define npm scripts, e.g., "start": "node index.js".
+{
+  "name": "notebackend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
+
+Create index.js:
+Create a file named index.js.
+Add a basic log statement.
+// index.js
+console.log('hello world');
+
+
+Run the Application:
+Execute node index.js or npm start in the terminal.
+Understand npm scripts for running tasks.
+
+Understanding npm Scripts:
+npm start runs the application.
+npm test (default) echoes an error since tests aren't set up.
+
+
+Extend the Application with Express:
+Install Express using npm install express.
+Modify index.js to create a basic Express app.
+// index.js
+const express = require('express');
+const app = express();
+
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello Express!');
+});
+
+app.listen(port, () => {
+  console.log(`Server is listening at http://localhost:${port}`);
+});
+
+
+
+Code Modification:
+Use the http module to create a simple web server.
+Respond to all HTTP requests with a "Hello World" message.
+javascript
+// index.js
+const http = require('http');
+
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' });
+  response.end('Hello World');
+});
+
+const PORT = 3001;
+app.listen(PORT);
+console.log(`Server running on port ${PORT}`);
+
+
+Server Operation:
+Execute npm start or node index.js to start the server.
+The console will display "Server running on port 3001."
+
+Accessing the Server:
+Open a web browser and navigate to http://localhost:3001.
+The browser should display "Hello World."
+Server running on port 3001
+
+Handling Port Conflict:
+If port 3001 is in use, you'll encounter an error.
+Either shut down the conflicting application or change the server's port.
+
+
+
+Code Explanation:
+Import the http module.
+Create a server using http.createServer.
+Respond to requests with a "Hello World" message.
+
+
+JSON Response:
+Extend the server to return a hardcoded list of notes in JSON format.
+// index.js
+const http = require('http');
+
+let notes = [
+  { id: 1, content: "HTML is easy", important: true },
+  { id: 2, content: "Browser can execute only JavaScript", important: false },
+  { id: 3, content: "GET and POST are the most important methods of HTTP protocol", important: true }
+];
+
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'application/json' });
+  response.end(JSON.stringify(notes));
+});
+
+const PORT = 3001;
+app.listen(PORT);
+console.log(`Server running on port ${PORT}`);
+
+
+
+Installing Express:
+Execute npm install express to add Express as a project dependency.
+The installed version, indicated in package.json, utilizes semantic versioning with a caret (^) to ensure compatibility.
+
+// package.json
+{
+  // ...
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+
+Semantic Versioning (SemVer):
+The caret (^) signifies that, when updating dependencies, the installed Express version will be at least 4.18.2.
+Semantic versioning ensures compatibility, with the major version remaining unchanged for backward compatibility.
+
+
+
+Updating Dependencies:
+Execute npm update to update dependencies based on version constraints in package.json.
+Semantic versioning ensures that only backward-compatible updates are applied.
+
+
+Installing Dependencies on a New System:
+On a new computer, run npm install in the project's root directory to install dependencies based on package.json.
+This ensures consistency in the development environment across different machines.
+
+
+Semantic Versioning Compatibility:
+Backward compatibility is maintained when the major version remains the same.
+For instance, if using version 4.99.175 of Express in the future, the existing code should remain compatible.
+
+
+Express Integration:
+Express offers a more convenient and expressive way to build a backend server compared to the basic http module.
+It simplifies routing, middleware handling, and overall server management, leading to more maintainable code.
+
+
+<---- Web and Express ----->
+
+
+Express Integration:
+Import and initialize Express to create an express application.
+
+const express = require('express');
+const app = express();
+
+Notes:
+Express is a web application framework for Node.js, simplifying server-side development.
+
+
+Root Route:
+Define a route for HTTP GET requests to the root path ("/").
+Respond to requests with an HTML string ("<h1>Hello World!</h1>").
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>');
+});
+
+Notes:
+app.get() defines a route for handling HTTP GET requests to a specific path.
+The callback function inside app.get() is the event handler for the route.
+response.send() sends the specified HTML string as the response.
+
+
+API Notes Route:
+Define a route for HTTP GET requests to the "/api/notes" path.
+Respond to requests with the notes array in JSON format using response.json(notes).
+
+app.get('/api/notes', (request, response) => {
+  response.json(notes);
+});
+
+
+Notes:
+/api/notes is an API endpoint for retrieving notes data.
+response.json(notes) sends the notes array as a JSON response.
+Express automatically sets the Content-Type header to "application/json."
+
+
+Server Listening:
+Set the application to listen on port 3001.
+Print a message to the console once the server is running
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+
+Notes:
+app.listen() starts the server and listens for incoming requests on the specified port.
+The callback function is executed once the server is successfully running.
+
+
+Automatic JSON Transformation:
+Express automatically converts the JavaScript array notes into JSON format when using response.json(notes).
+
+
+Node REPL Experiment:
+Demonstrates that JSON data is a string and not a JavaScript object.
+In the Node REPL, JSON.stringify(notes) transforms the array into a JSON-formatted string.
+
+
