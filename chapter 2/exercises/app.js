@@ -1,37 +1,37 @@
-import React from 'react';
-import Course from './course';
+// App.js
+import React, { useState } from 'react';
 
 const App = () => {
-    const course = {
-      id: 1,
-      name: 'Half Stack application development',
-      parts: [
-        {
-          name: 'Fundamentals of React',
-          exercises: 10,
-          id: 1
-        },
-        {
-          name: 'Using props to pass data',
-          exercises: 7,
-          id: 2
-        },
-        {
-          name: 'State of a component',
-          exercises: 14,
-          id: 3
-        }
-      ]
-    }
-  
-    return (
-        <div>
-          {courses.map(course => (
-            <Course key={course.id} course={course} />
-          ))}
-        </div>
-      );
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas' }
+  ]);
+  const [newName, setNewName] = useState('');
+
+  const addPerson = (event) => {
+    event.preventDefault();
+
+    const personObject = {
+      name: newName
     };
-    
-    export default App;
-    
+
+    setPersons(persons.concat(personObject));
+    setNewName('');
+  };
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addPerson}>
+        <div>
+          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+    </div>
+  );
+};
+
+export default App;
