@@ -5,21 +5,26 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]);
   const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
 
   const addPerson = () => {
     // Check if the entered name already exists in the phonebook
     const nameExists = persons.some(person => person.name === newName);
 
-    // If the name already exists it issue a warning and return
-    if (nameExists) {
-      alert(`${newName} is already added to the phonebook`);
+    // Check if the entered name or number already exists in the phonebook
+    const numberExists = persons.some(person => person.number === newNumber);
+
+    // If the name or number already exists, issue a warning and return
+    if (nameExists || numberExists) {
+      alert(`${newName} or ${newNumber} is already added to the phonebook`);
       return;
     }
 
-    // If the name doesn't exist proceed with adding a new person
-    const newPerson = { name: newName };
+    // If the name and number don't exist, proceed with adding a new person
+    const newPerson = { name: newName, number: newNumber };
     setPersons([...persons, newPerson]);
     setNewName('');
+    setNewNumber('');
   };
 
   const storeInfo = (event) => {
@@ -37,10 +42,15 @@ const App = () => {
         <div>
           Name:
           <input 
-          // content of input field is controlled by react 
             value={newName} 
-            // on change calls a function when value changes and setNewName takes object and sets it to the input 
             onChange={(event) => setNewName(event.target.value)} 
+          />
+        </div>
+        <div>
+          Number: 
+          <input 
+            value={newNumber} 
+            onChange={(event) => setNewNumber(event.target.value)} 
           />
         </div>
         <div>
@@ -54,7 +64,7 @@ const App = () => {
 
       {/* Displays each person's name */}
       {persons.map((person, index) => (
-        <div key={index}>{person.name}</div>
+        <div key={index}>{person.name} - {person.number}</div>
       ))}
     </div>
   );
