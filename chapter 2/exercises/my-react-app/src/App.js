@@ -1,4 +1,7 @@
 import { useState } from 'react';
+// import Filter from './Filter';
+// import PersonForm from './PersonForm';
+// import Persons from './Persons';
 
 const App = () => {
   // State to manage the list of persons
