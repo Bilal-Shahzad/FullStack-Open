@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Filter = ({ searchTerm, onSearchChange }) => (
+const filter = ({ searchTerm, onSearchChange }) => (
   <div>
     Search: 
     <input 
@@ -10,4 +10,4 @@ const Filter = ({ searchTerm, onSearchChange }) => (
   </div>
 );
 
-export default Filter;
+export default filter;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-// import Filter from './Filter';
-// import PersonForm from './PersonForm';
-// import Persons from './Persons';
+import Filter from './filter'; 
+import PersonForm from './personform'; 
+import Persons from './Persons'
 
 const App = () => {
   // State to manage the list of persons
@@ -46,37 +46,27 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       
-      {/* Form to add a new person */}
-      <form onSubmit={storeInfo}>
-        <div>
-          {/* Input field for entering a name */}
-          Name:
-          <input 
-            value={newName} 
-            onChange={(event) => setNewName(event.target.value)} 
-          />
-        </div>
-        <div>
-          {/* Input field for entering a phone number */}
-          Number: 
-          <input 
-            value={newNumber} 
-            onChange={(event) => setNewNumber(event.target.value)} 
-          />
-        </div>
-        <div>
-          {/* Submit button to add a new person */}
-          <button type="submit">Add</button>
-        </div>
-      </form>
+      {/* Filter component for the search functionality */}
+      <Filter 
+        searchTerm={newName} 
+        onSearchChange={setNewName} 
+      />
 
-      {/* Displaying the Numbers heading */}
-      <h2>Numbers</h2>
+      <h3>Add a new</h3>
 
-      {/* Displays each person's name and number */}
-      {persons.map((person, index) => (
-        <div key={index}>{person.name} - {person.number}</div>
-      ))}
+      {/* PersonForm file being called for adding new people */}
+      <PersonForm 
+        newName={newName} 
+        newNumber={newNumber} 
+        onNameChange={setNewName} 
+        onNumberChange={setNewNumber} 
+        onFormSubmit={storeInfo} 
+      />
+
+      <h3>Numbers</h3>
+
+      {/* Persons file being called for rendering the list of people */}
+      <Persons persons={persons} />
     </div>
   );
 }
