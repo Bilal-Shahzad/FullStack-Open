@@ -1,12 +1,16 @@
 import { useState } from 'react';
 
 const App = () => {
+  // State to manage the list of persons
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
   ]);
+  
+  // States to manage the input values for name and number
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
+  // Function to add a new person to the phonebook
   const addPerson = () => {
     // Check if the entered name already exists in the phonebook
     const nameExists = persons.some(person => person.name === newName);
@@ -23,12 +27,14 @@ const App = () => {
     // If the name and number don't exist, proceed with adding a new person
     const newPerson = { name: newName, number: newNumber };
     setPersons([...persons, newPerson]);
+    
+    // Clear the input fields after adding a person
     setNewName('');
     setNewNumber('');
   };
 
+  // Function to handle form submission, prevents it from submitting again
   const storeInfo = (event) => {
-    // Prevents it from submitting again
     event.preventDefault();
     addPerson();
   };
@@ -37,9 +43,10 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       
-      {/* Creates a form that calls storeInfo for adding a new person */}
+      {/* Form to add a new person */}
       <form onSubmit={storeInfo}>
         <div>
+          {/* Input field for entering a name */}
           Name:
           <input 
             value={newName} 
@@ -47,6 +54,7 @@ const App = () => {
           />
         </div>
         <div>
+          {/* Input field for entering a phone number */}
           Number: 
           <input 
             value={newNumber} 
@@ -62,7 +70,7 @@ const App = () => {
       {/* Displaying the Numbers heading */}
       <h2>Numbers</h2>
 
-      {/* Displays each person's name */}
+      {/* Displays each person's name and number */}
       {persons.map((person, index) => (
         <div key={index}>{person.name} - {person.number}</div>
       ))}
