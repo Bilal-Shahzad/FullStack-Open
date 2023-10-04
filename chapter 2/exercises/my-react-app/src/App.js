@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import Filter from './filter'; 
-import PersonForm from './personform'; 
-import Persons from './Persons'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Filter from './filter';
+import PersonForm from './personform';
+import Persons from './Persons';
 
 const App = () => {
   // State to manage the list of persons
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ]);
-  
-  // States to manage the input values for name and number
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Effect hook to fetch initial data from the server
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []); // The empty dependency array ensures that the effect runs only once on mount
 
   // Function to add a new person to the phonebook
   const addPerson = () => {
@@ -45,16 +54,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      
-      {/* Filter component for the search functionality */}
+
+      {/* Filter component for search functionality */}
       <Filter 
-        searchTerm={newName} 
-        onSearchChange={setNewName} 
+        searchTerm={searchTerm} 
+        onSearchChange={setSearchTerm} 
       />
 
       <h3>Add a new</h3>
 
-      {/* PersonForm file being called for adding new people */}
+      {/* PersonForm component for adding new people */}
       <PersonForm 
         newName={newName} 
         newNumber={newNumber} 
@@ -65,7 +74,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      {/* Persons file being called for rendering the list of people */}
+      {/* Persons component for rendering the list of people */}
       <Persons persons={persons} />
     </div>
   );
