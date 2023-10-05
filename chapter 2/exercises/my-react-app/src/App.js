@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Filter from './filter';
-import PersonForm from './personform';
-import Persons from './Persons';
+import Filter from './filter'; 
+import PersonForm from './personform'; 
+import Persons from './Persons'; 
 
 const App = () => {
   // State to manage the list of persons
