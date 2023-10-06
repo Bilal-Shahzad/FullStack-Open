@@ -22,28 +22,37 @@ const App = () => {
       });
   }, []); // The empty dependency array ensures that the effect runs only once on mount
 
-  // Function to add a new person to the phonebook
   const addPerson = () => {
     // Check if the entered name already exists in the phonebook
     const nameExists = persons.some(person => person.name === newName);
-
+  
     // Check if the entered name or number already exists in the phonebook
     const numberExists = persons.some(person => person.number === newNumber);
-
+  
     // If the name or number already exists, issue a warning and return
     if (nameExists || numberExists) {
       alert(`${newName} or ${newNumber} is already added to the phonebook`);
       return;
     }
-
+  
     // If the name and number don't exist, proceed with adding a new person
     const newPerson = { name: newName, number: newNumber };
-    setPersons([...persons, newPerson]);
-    
+  
+    // Make a POST request to the server to save the new person
+    axios.post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        // Update the state with the new person returned from the server
+        setPersons([...persons, response.data]);
+      })
+      .catch(error => {
+        console.error('Error adding person:', error);
+      });
+  
     // Clear the input fields after adding a person
     setNewName('');
     setNewNumber('');
   };
+  
 
   // Function to handle form submission, prevents it from submitting again
   const storeInfo = (event) => {
