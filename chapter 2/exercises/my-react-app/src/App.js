@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Filter from './filter'; 
-import PersonForm from './personform'; 
-import Persons from './Persons'; 
+import personService from './services/personService';
+import Filter from './filter';
+import PersonForm from './personform';
+import Persons from './Persons';
 
 const App = () => {
   // State to manage the list of persons
@@ -13,46 +13,42 @@ const App = () => {
 
   // Effect hook to fetch initial data from the server
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data);
+    personService.getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []); // The empty dependency array ensures that the effect runs only once on mount
+  }, []);
 
+  // Function to add a new person to the phonebook
   const addPerson = () => {
-    // Check if the entered name already exists in the phonebook
     const nameExists = persons.some(person => person.name === newName);
-  
-    // Check if the entered name or number already exists in the phonebook
     const numberExists = persons.some(person => person.number === newNumber);
-  
-    // If the name or number already exists, issue a warning and return
+
     if (nameExists || numberExists) {
       alert(`${newName} or ${newNumber} is already added to the phonebook`);
       return;
     }
-  
+
     // If the name and number don't exist, proceed with adding a new person
     const newPerson = { name: newName, number: newNumber };
-  
+
     // Make a POST request to the server to save the new person
-    axios.post('http://localhost:3001/persons', newPerson)
-      .then(response => {
+    personService.create(newPerson)
+      .then(returnedPerson => {
         // Update the state with the new person returned from the server
-        setPersons([...persons, response.data]);
+        setPersons([...persons, returnedPerson]);
       })
       .catch(error => {
         console.error('Error adding person:', error);
       });
-  
+
     // Clear the input fields after adding a person
     setNewName('');
     setNewNumber('');
   };
-  
 
   // Function to handle form submission, prevents it from submitting again
   const storeInfo = (event) => {
@@ -65,20 +61,20 @@ const App = () => {
       <h2>Phonebook</h2>
 
       {/* Filter component for search functionality */}
-      <Filter 
-        searchTerm={searchTerm} 
-        onSearchChange={setSearchTerm} 
+      <Filter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
       />
 
       <h3>Add a new</h3>
 
       {/* PersonForm component for adding new people */}
-      <PersonForm 
-        newName={newName} 
-        newNumber={newNumber} 
-        onNameChange={setNewName} 
-        onNumberChange={setNewNumber} 
-        onFormSubmit={storeInfo} 
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        onNameChange={setNewName}
+        onNumberChange={setNewNumber}
+        onFormSubmit={storeInfo}
       />
 
       <h3>Numbers</h3>
