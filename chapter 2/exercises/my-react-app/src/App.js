@@ -22,26 +22,49 @@ const App = () => {
   }, []);
 
   const addPerson = () => {
-    console.log('Adding person:', newName, newNumber);
-    const nameExists = persons.some(person => person.name === newName);
-    const numberExists = persons.some(person => person.number === newNumber);
+    const existingPerson = persons.find(person => person.name === newName);
 
-    if (nameExists || numberExists) {
-      alert(`${newName} or ${newNumber} is already added to the phonebook`);
-      return;
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to the phonebook. Do you want to update the number?`
+      );
+
+      if (!confirmUpdate) {
+        return;
+      }
+
+      // If the user confirms update the number using HTTP PUT
+      const updatedPerson = { ...existingPerson, number: newNumber };
+
+      personService
+        .update(existingPerson.id, updatedPerson)
+        .then(returnedPerson => {
+          setPersons(
+            persons.map(person =>
+              person.id !== existingPerson.id ? person : returnedPerson
+            )
+          );
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Error updating person:', error);
+        });
+    } else {
+      // If the person doesn't exist, proceed with adding a new person
+      const newPerson = { name: newName, number: newNumber };
+
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons([...persons, returnedPerson]);
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Error adding person:', error);
+        });
     }
-
-    const newPerson = { name: newName, number: newNumber };
-
-    personService.create(newPerson)
-      .then(returnedPerson => {
-        setPersons([...persons, returnedPerson]);
-        setNewName('');
-        setNewNumber('');
-      })
-      .catch(error => {
-        console.error('Error adding person:', error);
-      });
   };
 
   const deletePerson = (id) => {
