@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState, useEffect } from 'react';
 import personService from './services/personService';
 import Filter from './filter';
@@ -13,7 +11,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Effect hook to fetch initial data from the server
   useEffect(() => {
     personService.getAll()
       .then(initialPersons => {
@@ -24,22 +21,32 @@ const App = () => {
       });
   }, []);
 
-  // Function to add a new person to the phonebook
   const addPerson = () => {
-    // ... (unchanged code)
+    console.log('Adding person:', newName, newNumber);
+    const nameExists = persons.some(person => person.name === newName);
+    const numberExists = persons.some(person => person.number === newNumber);
+
+    if (nameExists || numberExists) {
+      alert(`${newName} or ${newNumber} is already added to the phonebook`);
+      return;
+    }
+
+    const newPerson = { name: newName, number: newNumber };
+
+    personService.create(newPerson)
+      .then(returnedPerson => {
+        setPersons([...persons, returnedPerson]);
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        console.error('Error adding person:', error);
+      });
   };
 
-  // Function to handle form submission, prevents it from submitting again
-  const storeInfo = (event) => {
-    event.preventDefault();
-    addPerson();
-  };
-
-  // Function to delete a person
   const deletePerson = (id) => {
-    const confirmDeletion = window.confirm("Are you sure you want to delete this person?");
-    
-    if (confirmDeletion) {
+    const confirmDelete = window.confirm('Do you really want to delete this person?');
+    if (confirmDelete) {
       personService.remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
@@ -48,6 +55,12 @@ const App = () => {
           console.error('Error deleting person:', error);
         });
     }
+  };
+
+  // Function to handle form submission, prevents it from submitting again
+  const storeInfo = (event) => {
+    event.preventDefault();
+    addPerson();
   };
 
   return (
@@ -77,6 +90,6 @@ const App = () => {
       <Persons persons={persons} onDelete={deletePerson} />
     </div>
   );
-}
+};
 
 export default App;
