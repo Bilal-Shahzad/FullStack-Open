@@ -1,3 +1,5 @@
+// App.js
+
 import React, { useState, useEffect } from 'react';
 import personService from './services/personService';
 import Filter from './filter';
@@ -24,36 +26,28 @@ const App = () => {
 
   // Function to add a new person to the phonebook
   const addPerson = () => {
-    const nameExists = persons.some(person => person.name === newName);
-    const numberExists = persons.some(person => person.number === newNumber);
-
-    if (nameExists || numberExists) {
-      alert(`${newName} or ${newNumber} is already added to the phonebook`);
-      return;
-    }
-
-    // If the name and number don't exist, proceed with adding a new person
-    const newPerson = { name: newName, number: newNumber };
-
-    // Make a POST request to the server to save the new person
-    personService.create(newPerson)
-      .then(returnedPerson => {
-        // Update the state with the new person returned from the server
-        setPersons([...persons, returnedPerson]);
-      })
-      .catch(error => {
-        console.error('Error adding person:', error);
-      });
-
-    // Clear the input fields after adding a person
-    setNewName('');
-    setNewNumber('');
+    // ... (unchanged code)
   };
 
   // Function to handle form submission, prevents it from submitting again
   const storeInfo = (event) => {
     event.preventDefault();
     addPerson();
+  };
+
+  // Function to delete a person
+  const deletePerson = (id) => {
+    const confirmDeletion = window.confirm("Are you sure you want to delete this person?");
+    
+    if (confirmDeletion) {
+      personService.remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error);
+        });
+    }
   };
 
   return (
@@ -80,7 +74,7 @@ const App = () => {
       <h3>Numbers</h3>
 
       {/* Persons component for rendering the list of people */}
-      <Persons persons={persons} />
+      <Persons persons={persons} onDelete={deletePerson} />
     </div>
   );
 }
