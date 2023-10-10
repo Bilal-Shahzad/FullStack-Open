@@ -3,8 +3,6 @@ import personService from './services/personService';
 import Filter from './filter';
 import PersonForm from './personform';
 import Persons from './Persons';
-import './index'
-import Footer from './Footer';
 
 const App = () => {
   // State to manage the list of persons
@@ -12,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll()
@@ -22,18 +21,6 @@ const App = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-  const showNotification = (message, type) => {
-    const notificationContainer = document.getElementById('notification-container');
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerText = message;
-    notificationContainer.appendChild(notification);
-
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
-  };
 
   const addPerson = () => {
     const existingPerson = persons.find(person => person.name === newName);
@@ -47,25 +34,10 @@ const App = () => {
         return;
       }
 
-      const updatedPerson = { ...existingPerson, number: newNumber };
-
-      personService
-        .update(existingPerson.id, updatedPerson)
-        .then(returnedPerson => {
-          setPersons(
-            persons.map(person =>
-              person.id !== existingPerson.id ? person : returnedPerson
-            )
-          );
-          setNewName('');
-          setNewNumber('');
-          showNotification('Person updated successfully', 'success');
-        })
-        .catch(error => {
-          console.error('Error updating person:', error);
-          showNotification('Error updating person. Please try again later.', 'error');
-        });
+      // If the user confirms update the number using HTTP PUT
+      updatePerson(existingPerson.id, newNumber);
     } else {
+      // If the person doesn't exist, proceed with adding a new person
       const newPerson = { name: newName, number: newNumber };
 
       personService
@@ -74,11 +46,9 @@ const App = () => {
           setPersons([...persons, returnedPerson]);
           setNewName('');
           setNewNumber('');
-          showNotification('Person added successfully', 'success');
         })
         .catch(error => {
           console.error('Error adding person:', error);
-          showNotification('Error adding person. Please try again later.', 'error');
         });
     }
   };
@@ -89,15 +59,48 @@ const App = () => {
       personService.remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
-          showNotification('Person deleted successfully', 'success');
         })
         .catch(error => {
           console.error('Error deleting person:', error);
-          showNotification('Error deleting person. Please try again later.', 'error');
         });
     }
   };
 
+  const updatePerson = (id, newNumber) => {
+    const personToUpdate = persons.find(person => person.id === id);
+
+    if (!personToUpdate) {
+      // Handle the case where the person is not found
+      setErrorMessage(`Person with id ${id} not found`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+      return;
+    }
+
+    const updatedPerson = { ...personToUpdate, number: newNumber };
+
+    personService
+      .update(id, updatedPerson)
+      .then(returnedPerson => {
+        setPersons(
+          persons.map(person =>
+            person.id !== id ? person : returnedPerson
+          )
+        );
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        // Handle the error and display a user-friendly message
+        setErrorMessage(`Failed to update the phone number for ${personToUpdate.name}`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      });
+  };
+
+  // Function to handle form submission, prevents it from submitting again
   const storeInfo = (event) => {
     event.preventDefault();
     addPerson();
@@ -129,10 +132,12 @@ const App = () => {
       {/* Persons component for rendering the list of people */}
       <Persons persons={persons} onDelete={deletePerson} />
 
-      <Footer />
-
-      {/* Notification container */}
-      <div id="notification-container"></div>
+      {/* Error message notification */}
+      {errorMessage && (
+        <div className="error">
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };
