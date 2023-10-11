@@ -5,6 +5,7 @@ import PersonForm from './personform';
 import Persons from './Persons';
 import './index.css'
 import Footer from './Footer';
+import CountryPage from '../CountryPage';
 
 const App = () => {
   // State to manage the list of persons
@@ -144,7 +145,11 @@ const App = () => {
           {errorMessage}
         </div>
       )}
+
+      {/* CountryPage component for displaying country information */}
+      <CountryPage searchTerm={searchTerm} />
     </div>
+    
   );
 };
 
