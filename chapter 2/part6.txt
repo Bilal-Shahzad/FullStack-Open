@@ -1,0 +1,22 @@
+Initial State Issue:
+ problem that arises when initializing the state with null. In this case, if the state is used immediately in the rendering logic (e.g., mapping over an array), it can lead to a "Cannot read properties of null" error.
+
+Conditional Rendering:
+To address the issue by using conditional rendering. By checking if the state is still null, the component returns null during the first render, preventing the error. Once the data is fetched and the state is updated, the component re-renders and displays the data.
+
+Alternative Approach - Empty Array:
+An alternative solution is presented by initializing the state with an empty array instead of null. This avoids the need for conditional rendering because an empty array allows map operations without causing errors. The initial render displays an empty result, and when the data arrives, the component re-renders with the actual data.
+
+Effect Hook's Dependency Array:
+ In the context of fetching data, using an empty dependency array ([]) ensures that the effect runs only after the first render, fetching and updating the data.
+
+Example with Currency Exchange Rates:
+ The effect runs when the currency value changes, fetching exchange rates and updating the state accordingly.
+
+Comparison with Direct API Request:
+ while the example could be implemented without the useEffect hook by making API requests directly in the form submit handler, there are situations where using useEffect is beneficial, especially in more complex scenarios.
+
+
+
+
+
