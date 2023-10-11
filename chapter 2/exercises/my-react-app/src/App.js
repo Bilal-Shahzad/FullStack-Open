@@ -3,6 +3,8 @@ import personService from './services/personService';
 import Filter from './filter';
 import PersonForm from './personform';
 import Persons from './Persons';
+import './index.css'
+import Footer from './Footer';
 
 const App = () => {
   // State to manage the list of persons
@@ -37,7 +39,7 @@ const App = () => {
       // If the user confirms update the number using HTTP PUT
       updatePerson(existingPerson.id, newNumber);
     } else {
-      // If the person doesn't exist, proceed with adding a new person
+      // If the person doent exist go with adding a new person
       const newPerson = { name: newName, number: newNumber };
 
       personService
@@ -70,7 +72,7 @@ const App = () => {
     const personToUpdate = persons.find(person => person.id === id);
 
     if (!personToUpdate) {
-      // Handle the case where the person is not found
+      // Handle the case where the person isnt found
       setErrorMessage(`Person with id ${id} not found`);
       setTimeout(() => {
         setErrorMessage(null);
@@ -92,7 +94,7 @@ const App = () => {
         setNewNumber('');
       })
       .catch(error => {
-        // Handle the error and display a user-friendly message
+        // Handle  error and display message
         setErrorMessage(`Failed to update the phone number for ${personToUpdate.name}`);
         setTimeout(() => {
           setErrorMessage(null);
@@ -100,7 +102,7 @@ const App = () => {
       });
   };
 
-  // Function to handle form submission, prevents it from submitting again
+  // Function to handle form submission prevents it from submitting again
   const storeInfo = (event) => {
     event.preventDefault();
     addPerson();
@@ -131,6 +133,10 @@ const App = () => {
 
       {/* Persons component for rendering the list of people */}
       <Persons persons={persons} onDelete={deletePerson} />
+
+<Footer />
+
+<div id="notification-container"></div>
 
       {/* Error message notification */}
       {errorMessage && (
