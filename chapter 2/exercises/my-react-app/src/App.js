@@ -5,7 +5,7 @@ import PersonForm from './personform';
 import Persons from './Persons';
 import './index.css'
 import Footer from './Footer';
-import CountryPage from '../CountryPage';
+import CountryPage from './CountryPage';
 
 const App = () => {
   // State to manage the list of persons

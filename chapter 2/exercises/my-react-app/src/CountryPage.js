@@ -6,9 +6,28 @@ import CountryDetails from './CountryDetails';
 const CountryPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [countries, setCountries] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Note for Bilal: need to still pull API info
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://studies.cs.helsinki.fi/restcountries/api/all');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch countries');
+        }
+
+        const data = await response.json();
+        setCountries(data);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+        setCountries([]);
+        setError('Failed to fetch countries');
+      }
+    };
+
+    fetchCountries();
   }, [searchQuery]);
 
   return (
@@ -16,6 +35,7 @@ const CountryPage = () => {
       <h2>Data for Countries</h2>
 
       <CountrySearch onSearch={setSearchQuery} />
+      {error && <p>{error}</p>}
       {countries.length > 10 && <p>Too many matches, be more specific</p>}
       {countries.length <= 10 && countries.length > 1 && <CountryList countries={countries} />}
       {countries.length === 1 && <CountryDetails country={countries[0]} />}
