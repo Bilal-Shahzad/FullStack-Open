@@ -18,8 +18,6 @@ const CountryPage = () => {
         }
 
         const data = await response.json();
-        setCountries(data);
-        setError(null);
       } catch (error) {
         console.error('Error fetching countries:', error);
         setCountries([]);

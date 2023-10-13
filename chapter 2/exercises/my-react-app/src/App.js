@@ -15,15 +15,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  useEffect(() => {
-    personService.getAll()
-      .then(initialPersons => {
-        setPersons(initialPersons);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+
 
   const addPerson = () => {
     const existingPerson = persons.find(person => person.name === newName);
