@@ -26,8 +26,8 @@ const App = () => {
   console.log('Course:', course);
 
   const totalExercises = course.parts.reduce((sum, part) => {
-    console.log('Part:', part);
     console.log('Current Sum:', sum);
+    console.log('Current Part:', part);
     return sum + part.exercises;
   }, 0);
 
