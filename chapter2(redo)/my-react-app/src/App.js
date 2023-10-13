@@ -1,4 +1,5 @@
 import React from 'react';
+import Course from './course';
 
 const App = () => {
   const courses = [
@@ -48,18 +49,12 @@ const App = () => {
 
   return (
     <div>
-      {courses.map(course => (
-        <div key={course.id}>
-          <h1>{course.name}</h1>
-          {course.parts.map(part => (
-            <p key={part.id}>
-              {part.name} {part.exercises}
-            </p>
-          ))}
-        </div>
+      {courses.map((course) => (
+        <Course key={course.id} course={course} />
       ))}
     </div>
   );
 };
+
 
 export default App;
