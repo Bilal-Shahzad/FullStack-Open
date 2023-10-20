@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = ({ courseName, totalExercises}) => {
+const Header = ({ courseName, totalExercises }) => {
   console.log(Header, 'header component');
   
   return (
@@ -11,7 +11,7 @@ const Header = ({ courseName, totalExercises}) => {
   );
 };
 
-const Part = ({part}) => {
+const Part = ({ part }) => {
   console.log(Part, 'part');
   
   return (
@@ -24,7 +24,7 @@ const Part = ({part}) => {
 const Content = ({ parts }) => {
   const totalExercises = parts.reduce((sum, part) => sum + part.exercises, 0);
 
-  console.log(parts , 'parts ');
+  console.log(parts, 'parts ');
   
   return (
     <div>
