@@ -1,47 +1,57 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas' },
   ]);
   const [newName, setNewName] = useState('');
 
   const addPerson = (event) => {
-    event.preventDefault(); 
-    console.log('Form submitted');
+    event.preventDefault();
 
-    const newPerson = { name: newName };
-    console.log('New person created:', newPerson);
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`);
+    } else {
+      const newPerson = { name: newName };
 
-    setPersons([...persons, newPerson]);
-    console.log('Persons state updated:', persons);
+      setPersons([...persons, newPerson]);
+      setNewName('');
+    }
+  };
 
-    setNewName('');
-    console.log('Input field cleared');
-  }
+  console.log('persons:', persons);
+  console.log('newName:', newName);
 
   return (
     <div>
+      console.log('Rendering the component');
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
+      <form>
         <div>
-          name: <input
-            value={newName}
-            onChange={(event) => setNewName(event.target.value)}
-          />
+          console.log('Rendering the input field');
+          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
         </div>
         <div>
-          <button type="submit">add</button>
+          console.log('Rendering the submit button');
+          <button type="submit" onClick={addPerson}>
+            console.log('Rendering the button text');
+            add
+          </button>
         </div>
       </form>
       <h2>Numbers</h2>
       <ul>
         {persons.map((person, index) => (
-          <li key={index}>{person.name}</li>
+          <li key={index}>
+            console.log(`Rendering person ${index}: ${person.name}`);
+            {person.name}
+          </li>
         ))}
       </ul>
     </div>
   );
-}
+};
+
+console.log('App component loaded');
 
 export default App;
