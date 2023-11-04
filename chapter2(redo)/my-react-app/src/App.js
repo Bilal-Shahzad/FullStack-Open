@@ -1,16 +1,39 @@
 import React, { useState } from 'react';
+// import axios from 'axios';
 
-const Filter = ({ searchTerm, handleSearchChange }) => {
-  console.log("Rendering Filter component");
-  return (
-    <div>
-      Search: <input
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-    </div>
-  );
-};
+// class App extends Component {
+//   state = {
+//     notes: [] 
+//   };
+
+//   componentDidMount() {
+//     axios.get('//add a http: request for the notes').then(response => {
+//       const notes = response.data;
+//       this.setState({ notes }); 
+//     });
+//   }
+
+//   render() {
+//     return (
+//       <div>
+//       {/* do some research and see if i need to put the whole app return within here  */}
+//       </div>
+//     );
+//   }
+// }
+
+// export default App;
+// const Filter = ({ searchTerm, handleSearchChange }) => {
+//   console.log("Rendering Filter component");
+//   return (
+//     <div>
+//       Search: <input
+//         value={searchTerm}
+//         onChange={handleSearchChange}
+//       />
+//     </div>
+//   );
+// };
 
 const PersonForm = ({ newName, newNumber, handleNameChange, handleNumberChange, addPerson }) => {
   console.log("Rendering PersonForm component");
