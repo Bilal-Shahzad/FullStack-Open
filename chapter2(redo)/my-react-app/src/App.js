@@ -1,90 +1,28 @@
-import React, { useState } from 'react';
-// import axios from 'axios';
-
-// class App extends Component {
-//   state = {
-//     notes: [] 
-//   };
-
-//   componentDidMount() {
-//     axios.get('//add a http: request for the notes').then(response => {
-//       const notes = response.data;
-//       this.setState({ notes }); 
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//       {/* do some research and see if i need to put the whole app return within here  */}
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;
-// const Filter = ({ searchTerm, handleSearchChange }) => {
-//   console.log("Rendering Filter component");
-//   return (
-//     <div>
-//       Search: <input
-//         value={searchTerm}
-//         onChange={handleSearchChange}
-//       />
-//     </div>
-//   );
-// };
-
-const PersonForm = ({ newName, newNumber, handleNameChange, handleNumberChange, addPerson }) => {
-  console.log("Rendering PersonForm component");
-  return (
-    <form>
-      <div>
-        name: <input
-          value={newName}
-          onChange={handleNameChange}
-        />
-      </div>
-      <div>
-        number: <input
-          value={newNumber}
-          onChange={handleNumberChange}
-        />
-      </div>
-      <div>
-        <button type="submit" onClick={addPerson}>
-          add
-        </button>
-      </div>
-    </form>
-  );
-};
-
-const Persons = ({ filteredPersons }) => {
-  console.log("Rendering Persons component");
-  return (
-    <ul>
-      {filteredPersons.map((person) => (
-        <li key={person.id}>
-          {person.name} {person.number}
-        </li>
-      ))}
-    </ul>
-  );
-};
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const App = () => {
-  console.log("Rendering App component");
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]);
+
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPersons, setFilteredPersons] = useState([...persons]);
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        const notes = response.data;
+        setPersons(notes);
+        setFilteredPersons(notes);
+      });
+  }, []); 
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -99,29 +37,57 @@ const App = () => {
     }
   };
 
-  const filteredPersons = persons.filter((person) =>
-    person.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleSearchChange = (event) => {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+    const updatedFilteredPersons = persons.filter((person) =>
+      person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredPersons(updatedFilteredPersons);
+  };
 
   return (
     <div>
       <h2>Phonebook</h2>
 
-      <Filter searchTerm={searchTerm} handleSearchChange={(e) => setSearchTerm(e.target.value)} />
+      <div>
+        Search: <input
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
 
-      <h3>Add a new person</h3>
+      <h3>Add a new</h3>
 
-      <PersonForm
-        newName={newName}
-        newNumber={newNumber}
-        handleNameChange={(e) => setNewName(e.target.value)}
-        handleNumberChange={(e) => setNewNumber(e.target.value)}
-        addPerson={addPerson}
-      />
+      <form>
+        <div>
+          name: <input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </div>
+        <div>
+          number: <input
+            value={newNumber}
+            onChange={(e) => setNewNumber(e.target.value)}
+          />
+        </div>
+        <div>
+          <button type="submit" onClick={addPerson}>
+            add
+          </button>
+        </div>
+      </form>
 
       <h3>Numbers</h3>
 
-      <Persons filteredPersons={filteredPersons} />
+      <ul>
+        {filteredPersons.map((person) => (
+          <li key={person.id}>
+            {person.name} {person.number}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
