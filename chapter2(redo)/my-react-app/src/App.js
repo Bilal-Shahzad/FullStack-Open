@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Note from './components/Note';
-import noteService from './services/notes';
+import Note from './note';
+import noteService from './note';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -8,6 +8,14 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
+    axios.get('http://localhost:3001/notes')
+    .then(response => {
+      const fetchedNotes = response.data;
+      setNotes(fetchedNotes);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
     noteService
       .getAll()
       .then(initialNotes => {
@@ -66,5 +74,6 @@ const App = () => {
     </div>
   );
 };
+
 
 export default App;
