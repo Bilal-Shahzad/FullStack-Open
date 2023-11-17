@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Note from './note';
+import axios from 'axios';
 import noteService from './note';
+import Note from './note';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -8,48 +9,57 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/notes')
-    .then(response => {
-      const fetchedNotes = response.data;
-      setNotes(fetchedNotes);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
-    noteService
-      .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes);
+    console.log('effect');
+    axios
+      .get('http://localhost:3001/notes')
+      .then((response) => {
+        console.log('promise fulfilled');
+        setNotes(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching notes:', error);
       });
   }, []);
 
   const addNote = (event) => {
     event.preventDefault();
+
     const noteObject = {
       content: newNote,
-      important: Math.random() > 0.5
+      important: Math.random() > 0.5,
     };
 
     noteService
       .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote));
+      .then((returnedNote) => {
+        setNotes([...notes, returnedNote]);
+        // Clears input field
         setNewNote('');
+      })
+      .catch((error) => {
+        console.error('Error creating a new note:', error);
+        // Handle error if needed
       });
   };
 
   const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id);
+    const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
 
     noteService
       .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => (note.id !== id ? note : returnedNote)));
+      .then((returnedNote) => {
+        setNotes(
+          notes.map((note) => (note.id !== id ? note : returnedNote))
+        );
+      })
+      .catch((error) => {
+        console.error('Error updating note:', error);
+        // same handle errpr 
       });
   };
 
-  const notesToShow = showAll ? notes : notes.filter(note => note.important);
+  const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   return (
     <div>
@@ -60,8 +70,12 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note => (
-          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />
+        {notesToShow.map((note) => (
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         ))}
       </ul>
       <form onSubmit={addNote}>
@@ -74,6 +88,5 @@ const App = () => {
     </div>
   );
 };
-
 
 export default App;
