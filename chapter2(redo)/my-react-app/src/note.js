@@ -14,10 +14,15 @@ const update = (id, updatedNote) => {
   return axios.put(`${baseUrl}/${id}`, updatedNote).then(response => response.data);
 };
 
-const notes = {
-  getAll,
-  create,
-  update,
-};
+const notes = ({ note, toggleImportance }) => {
+    const label = note.important ? 'make not important' : 'make important';
+  
+    return (
+      <li>
+        {note.content} 
+        <button onClick={toggleImportance}>{label}</button>
+      </li>
+    );
+  };
 
 export default notes;

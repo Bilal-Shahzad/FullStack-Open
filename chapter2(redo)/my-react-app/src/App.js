@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import noteService from './note';
+import noteService from './noteService';
 import Note from './note';
 
 const App = () => {
@@ -28,15 +28,7 @@ const App = () => {
       content: newNote,
       important: Math.random() > 0.5,
     };
-  
-    axios
-      .post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        setNotes(notes.concat(response.data));
-        setNewNote('');
-      });
-  };
-  
+
     noteService
       .create(noteObject)
       .then((returnedNote) => {
@@ -51,21 +43,22 @@ const App = () => {
   };
 
   const toggleImportanceOf = (id) => {
+    const url = `http://localhost:3001/notes/${id}`;
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
 
     noteService
-      .update(id, changedNote)
-      .then((returnedNote) => {
-        setNotes(
-          notes.map((note) => (note.id !== id ? note : returnedNote))
-        );
-      })
-      .catch((error) => {
-        console.error('Error updating note:', error);
-        // same handle errpr 
-      });
-  };
+    .update(id, changedNote)
+    .then((returnedNote) => {
+      setNotes(
+        notes.map((note) => (note.id !== id ? note : returnedNote))
+      );
+    })
+    .catch((error) => {
+      // handle error if needed
+      console.error('Error updating note:', error);
+    });
+};
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
