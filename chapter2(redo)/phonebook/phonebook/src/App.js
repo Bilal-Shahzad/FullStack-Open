@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import Alert from './components/Alert'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './components/Person2'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -12,30 +12,65 @@ const App = () => {
 
   const [ filter, setFilter ] = useState('')
 
-  const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+  const getAllHook = () => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }
 
-  useEffect(hook, [])
+  useEffect(getAllHook, [])
 
   const addPerson = (event) => {
     event.preventDefault()
-    const noteObject = {
+    const personObject = {
       name: newName,
-      number: newNumber,
+      number: newNumber
     }
 
-    if (persons.find(person => 
-        person.name.toLowerCase() === noteObject.name.toLowerCase())) {
-      Alert(noteObject)
+    const checkPerson = persons.find(person => 
+      person.name.toLowerCase() === personObject.name.toLowerCase())
+
+    if (checkPerson && checkPerson.number === newNumber) {
+      Alert(personObject)
+    } else if (checkPerson && checkPerson.number !== newNumber) {
+      const confirmNewNumber = window.confirm(`Are you sure you want update ${checkPerson.name}'s number with a new one?`)
+      
+      if (confirmNewNumber) {
+        const personUpdate = { ...checkPerson, number: newNumber }
+        personService
+          .update(checkPerson.id, personUpdate)
+          .then(returnedPerson =>{
+            setPersons(
+              persons.map(person =>
+                person.id !== checkPerson.id ? person : returnedPerson
+              )
+            )
+          })
+      }
     } else {
-      setPersons(persons.concat(noteObject))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+        })
+    }
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id)
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${person.name}?`)
+    
+    if (confirmDelete) {
+      personService
+        .remove(id)
+        .then(returnedPerson => {
+          persons.map(person => person.id !== id ? person : returnedPerson)
+        })
+      setPersons(persons.filter(person => person.id !== id))
     }
   }
 
@@ -51,7 +86,11 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  return (
+  const personsAfterFilter = 
+    filter === ''  ? persons : persons.filter(person => 
+      person.name.toLowerCase().includes(filter.toLowerCase()))
+
+      return (
     <div>
       <h2>Phonebook</h2>
       <Filter
@@ -68,8 +107,8 @@ const App = () => {
       />
       <h3>Numbers</h3>
       <Persons
-        persons={persons}
-        filterValue={filter}
+        persons={personsAfterFilter}
+        deletePerson={deletePerson}
       />
     </div>
   )
