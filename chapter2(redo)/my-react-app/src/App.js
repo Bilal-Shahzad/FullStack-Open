@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 // import Note from './components/Note';
 import noteService from './services/notes';
 import Filter from './components/PhoneBook/Filter';
