@@ -1,0 +1,38 @@
+Focus on backend development using Node.js.
+Node.js is a JavaScript runtime based on Google's Chrome V8 JavaScript engine.
+Course material based on Node.js version v18.13.0; ensure your version is up-to-date.
+Unlike browser-side JavaScript, Node.js supports the latest features without transpilation.
+
+Setup and Configuration:
+npm (Node Package Manager) is used for managing JavaScript packages.
+Initiate a new project with npm init in an appropriate directory.
+Generated package.json file contains project information.
+Modify scripts in package.json to include a start script: "start": "node index.js"
+
+
+Package.json Overview:
+
+package.json example:
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matti Luukkainen",
+  "license": "MIT"
+}
+
+
+Creating the "Hello World" Application:
+Add a simple index.js file to the project root.
+console.log('hello world');
+Run the program using node index.js or as an npm script with npm start.
+
+npm Scripts Usage:
+It is customary for npm projects to execute tasks using npm scripts.
+npm start runs the application using the script defined in package.json.
+npm test (commonly used) is defined by default; currently echoes an error message.

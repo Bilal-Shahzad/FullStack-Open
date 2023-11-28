@@ -1,0 +1,33 @@
+Transform the basic "hello world" application into a web server using Node.js.
+Utilizes the built-in http module in Node.js
+
+Running the Server:
+Execute npm start or node index.js to start the server.
+Console message: "Server running on port 3001."
+
+Accessing the Server:
+Open the browser and visit http://localhost:3001.
+
+Handling Port In-use Error:
+If port 3001 is in use, an error will occur.
+Solution: Either shut down the application using port 3001 or choose a different port.
+
+Importing http Module:
+const http = require('http')
+
+CommonJS vs. ES6 Modules:
+Node.js uses CommonJS modules instead of ES6 modules.
+Node supports both, but CommonJS is used for compatibility and historical reasons.
+
+Creating the Server:
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' })
+  response.end('Hello World')
+})
+Uses createServer method to create a web server.
+Event handler responds to HTTP requests with a status code, content type, and content.
+
+Content-Type Header:
+Content-Type header set to application/json indicates JSON data.
+JSON.stringify(notes) transforms the notes array into JSON.
+
