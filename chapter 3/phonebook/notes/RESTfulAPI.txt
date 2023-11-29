@@ -1,0 +1,3 @@
+RESTful APIs are introduced, defining resources with unique URLs and using HTTP verbs (GET, POST, DELETE, etc.) for operations.
+
+A route is implemented for fetching a single resource, handling GET requests with parameters such as /api/notes/:id.

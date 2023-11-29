@@ -1,0 +1,3 @@
+Nodemon is introduced to address the need for manually restarting the server after code changes. It automatically restarts the Node application upon file modifications.
+
+Nodemon is installed as a development dependency, and an npm script is defined for starting the server in development mode using nodemon.

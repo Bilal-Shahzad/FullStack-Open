@@ -1,0 +1,3 @@
+Error handling is improved by responding with a 404 status code when a requested resource is not found.
+
+A route for deleting resources is implemented using the HTTP DELETE request, responding with a 204 status code for successful deletion.
