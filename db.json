@@ -26,6 +26,16 @@
       "id": 1,
       "content": "HTML is easy",
       "important": true
+    },
+    {
+      "content": "",
+      "important": false,
+      "id": 2
+    },
+    {
+      "content": "df",
+      "important": false,
+      "id": 3
     }
   ],
   "posts": [
