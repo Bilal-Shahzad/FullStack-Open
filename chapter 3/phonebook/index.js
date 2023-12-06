@@ -47,6 +47,15 @@ let persons = [
   },
 ]
 
+const number = persons.length
+// this sets up a rooute for handling GET requests 
+
+app.get("/info", (request, response) => {
+  // (request, response) gets used when a GET request is made for info 
+  response.send(`phonebook has info for ${number} people <br> ${new Date()}`)
+// response.send sends a response call 
+})
+
 app.get("/api/persons", (request, response) => {
   response.json(persons)
 })
