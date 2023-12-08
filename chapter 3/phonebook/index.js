@@ -47,12 +47,14 @@ let persons = [
   },
 ]
 
-const number = persons.length
+app.use(express.json())
 // this sets up a rooute for handling GET requests 
 
 app.get("/info", (request, response) => {
   // (request, response) gets used when a GET request is made for info 
-  response.send(`phonebook has info for ${number} people <br> ${new Date()}`)
+  response.send(
+    `phonebook has info for ${persons.length} people <br> ${new Date()}`
+  )
 // response.send sends a response call 
 })
 
@@ -65,6 +67,39 @@ app.delete("/api/persons/:id", (request, response) => {
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
+})
+
+// sets up route handler for HTTP post
+app.post("/api/persons", (request, response) => {
+  // extracts body property from request 
+  const body = request.body
+
+  // checks if the name property is missing in the request body 
+  if (!body.name) {
+    return response.status(400).json({
+      error: "name missing",
+    })
+  }
+
+  // checks if ther are is a person with the same name 
+  if (persons.filter(person => person.name === body.name).length > 0) {
+    return response.status(400).json({
+      error: "name already exists",
+    })
+  }
+
+// creates a new person object with randomly generate ID 
+  const person = {
+    id: Math.floor(Math.random() * 1000),
+    name: body.name,
+    number: body.number,
+    tipo: persons.filter(person => person.name === body.name),
+  }
+
+  // adds the person to the array 
+  persons = persons.concat(person)
+  // sends a JSON response that conatains the new person 
+  response.json(person)
 })
 
 app.get("/api/persons/:id", (request, response) => {
