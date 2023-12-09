@@ -84,7 +84,7 @@ app.post("/api/persons", (request, response) => {
   // checks if ther are is a person with the same name 
   if (persons.filter(person => person.name === body.name).length > 0) {
     return response.status(400).json({
-      error: "name already exists",
+      error: "name must be unique",
     })
   }
 
@@ -94,6 +94,11 @@ app.post("/api/persons", (request, response) => {
     name: body.name,
     number: body.number,
     tipo: persons.filter(person => person.name === body.name),
+  }
+  if (!body.number) {
+    return response.status(400).json({
+      error: "number missing",
+    })
   }
 
   // adds the person to the array 
