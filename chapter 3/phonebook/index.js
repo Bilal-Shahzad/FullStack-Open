@@ -6,6 +6,8 @@ const app = express()
 app.use(express.json())
 // adds middleware to express
 
+const morgan = require("morgan")
+
 let notes = [
   {
     id: 1,
@@ -48,6 +50,7 @@ let persons = [
 ]
 
 app.use(express.json())
+app.use(morgan("tiny"))
 // this sets up a rooute for handling GET requests 
 
 app.get("/info", (request, response) => {
