@@ -96,7 +96,6 @@ app.post("/api/persons", (request, response) => {
     id: Math.floor(Math.random() * 1000),
     name: body.name,
     number: body.number,
-    tipo: persons.filter(person => person.name === body.name),
   }
   if (!body.number) {
     return response.status(400).json({
