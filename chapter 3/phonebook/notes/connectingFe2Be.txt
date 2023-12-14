@@ -1,0 +1,9 @@
+# Connecting Frontend to Backend
+
+## Adjust Frontend Base URL:
+- Update frontend's API base URL to the backend URL.
+
+
+EX:
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/api/notes'
