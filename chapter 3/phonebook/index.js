@@ -7,6 +7,8 @@ app.use(express.json())
 // adds middleware to express
 
 const morgan = require("morgan")
+const cors = require("cors")
+
 
 let notes = [
   {
@@ -48,6 +50,7 @@ let persons = [
     number: "39-23-6423122",
   },
 ]
+app.use(cors())
 
 app.use(express.json())
 morgan.token("post", function (req) {
