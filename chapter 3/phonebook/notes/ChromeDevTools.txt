@@ -1,0 +1,15 @@
+Chrome Dev Tools:
+Debugging with Chrome developer console using the --inspect flag.
+Access the debugger through the green node logo icon in Chrome.
+Utilize the Sources tab for setting breakpoints and code execution control.
+Monitor console.log messages and inspect variable values.
+plaintext
+
+
+
+# Question Everything
+
+- Debugging Full Stack applications requires a systematic approach.
+- Identify where the problem occurs, question everything, and eliminate possibilities.
+- Logging, tools like Postman, debuggers, and experience play crucial roles.
+- The "stop and fix" principle helps avoid introducing more bugs.

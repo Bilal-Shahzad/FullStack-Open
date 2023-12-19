@@ -1,0 +1,7 @@
+# Frontend Production Build
+
+To create a production build for a Vite-based React application:
+1. Use the command: `npm run build`
+2. This generates a 'dist' directory containing minified HTML and JS files.
+
+The minified code may look complex but is optimized for production use.

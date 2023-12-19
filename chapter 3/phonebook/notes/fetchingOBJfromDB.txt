@@ -1,0 +1,10 @@
+Note.find({}).then(result => {
+  result.forEach(note => {
+    console.log(note)
+  })
+  mongoose.connection.close()
+})
+
+Note.find({}): Retrieves all notes from the database.
+Prints retrieved notes and closes the database connection
+

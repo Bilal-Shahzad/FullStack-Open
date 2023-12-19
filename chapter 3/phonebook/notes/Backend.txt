@@ -1,0 +1,14 @@
+# Serving Static Files from the Backend
+
+1. Deploying frontend:
+   - Copy 'dist' directory to the backend root.
+
+2. Use Express static middleware:
+   - Add `app.use(express.static('dist'))` to serve static content.
+   - Requests to `/index.html` or `/` show the React frontend.
+   - Requests to `/api/notes` are handled by the backend.
+
+3. Update frontend's API base URL to a relative path:
+   ```javascript
+   import axios from 'axios'
+   const baseUrl = '/api/notes'

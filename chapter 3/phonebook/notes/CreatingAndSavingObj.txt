@@ -1,0 +1,16 @@
+const note = new Note({
+  content: 'HTML is Easy',
+  important: false,
+})
+
+Models are constructor functions creating JavaScript objects based on parameters.
+Objects created with the model have model properties, including save method.
+
+note.save().then(result => {
+  console.log('note saved!')
+  mongoose.connection.close()
+})
+
+Save method stores the object in the database.
+Event handler closes the database connection after the save operation.
+

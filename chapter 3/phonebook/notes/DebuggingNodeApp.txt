@@ -1,0 +1,27 @@
+# Debugging Node Applications
+
+## Debugging Tools:
+- Debugging Node applications requires efficient tools and methods.
+- Console printing is a common and effective debugging technique.
+  
+## Visual Studio Code Debugger:
+- Visual Studio Code provides a debugger for Node applications.
+- Launch the debugger in debugging mode or with "Run" (newer versions).
+- Use breakpoints and the console to inspect variables and application state.
+
+
+// Example launch.json configuration for Visual Studio Code:
+"configurations": [
+  {
+    "type": "node",
+    "request": "launch",
+    "name": "Launch Program",
+    "program": "${workspaceFolder}/index.js",
+    "skipFiles": [
+      "<node_internals>/**"
+    ]
+  }
+]
+
+
+

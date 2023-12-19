@@ -1,0 +1,32 @@
+# Saving Data to MongoDB
+
+## Debugging Before Database Setup:
+- Debugging Node applications using tools like Visual Studio Code and Chrome Dev Tools.
+- Console printing, breakpoints, and systematic debugging methods.
+
+## MongoDB Setup:
+- Introduction to MongoDB, a document database.
+- Simplicity compared to relational databases, categorized under NoSQL.
+- MongoDB Atlas as the preferred MongoDB provider in the course.
+
+## MongoDB Atlas Setup:
+- Create an account and choose the free option on MongoDB Atlas.
+- Select cloud provider, location, and create a cluster.
+- Wait for the cluster to be ready before proceeding.
+
+# MongoDB Atlas Security Configuration
+
+1. Create user credentials for the database (not MongoDB Atlas login).
+2. Define IP addresses allowed to access the database.
+3. Connect to the database, obtain MongoDB URI.
+
+# MongoDB URI Example:
+
+mongodb+srv://fullstack:<password>@cluster0.o1opl.mongodb.net/?retryWrites=true&w=majority
+
+## Mongoose Library Installation:
+
+- Install Mongoose in the notes project backend:
+
+bash
+npm install mongoose

@@ -1,0 +1,28 @@
+# About HTTP Request Types
+
+## HTTP Request Properties:
+- **Safety:** GET and HEAD methods are recommended to be safe, meaning no server-side changes.
+- **Idempotency:** GET, HEAD, PUT, DELETE should have the property of idempotence, producing the same result with repeated requests.
+
+## Safety and Idempotence:
+- Safety ensures no side effects on the server.
+- Idempotence means the result is the same for N identical requests.
+
+## Request Types:
+- GET and HEAD are safe.
+- POST is neither safe nor idempotent.
+- PUT and DELETE are idempotent.
+
+## Middleware:
+- Express json-parser is a middleware.
+- Middleware handles request and response objects.
+- Middlewares are executed in order.
+
+## Custom Middleware:
+- Example middleware logs request information.
+- Order matters; json-parser used before custom middleware.
+
+## Unknown Endpoint Middleware:
+- Catches requests to non-existent routes.
+- Returns a 404 error in JSON format.
+

@@ -1,0 +1,14 @@
+# Schema Definition
+
+## Defining Schema and Model:
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
+noteSchema: Defines the schema for a note with content and importance.
+Note: Mongoose model representing the "notes" collection in the database.
+
