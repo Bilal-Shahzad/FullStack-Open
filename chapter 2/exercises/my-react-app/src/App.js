@@ -16,7 +16,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
 
-
+  useEffect(fetchHook, [message])
   const addPerson = () => {
     const existingPerson = persons.find(person => person.name === newName);
 
