@@ -10,7 +10,7 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const uri = `mongodb+srv://bshahzad01:BILSHAZ@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://bshahzad01:${password}@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -32,24 +32,23 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-    // Replace 'Note' and './path/to/your/note/model' with your actual Mongoose model and its path
-    const Note = require('./path/to/your/note/model');
-    console.log("Creating a new Note instance...");
-
-    const note = new Note({
-      title: process.argv[3],
-      content: process.argv[4],
+    const Note = require('..');
+    
+    // Fetch and print all notes
+    Note.find({}).then(result => {
+      console.log("All notes in the database:");
+      result.forEach(note => {
+        console.log(note);
+      });
+      mongoose.connection.close();
+      console.log("Mongoose connection closed.");
+    }).catch(error => {
+      console.error("Error fetching notes:", error);
     });
-
-    console.log("Saving the Note instance...");
-    await note.save();
-    console.log('Note saved!');
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
     console.log("MongoDB connection closed.");
-    mongoose.connection.close();
-    console.log("Mongoose connection closed.");
   }
 }
 
