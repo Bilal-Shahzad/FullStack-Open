@@ -1,45 +1,92 @@
-require('dotenv').config();
+// Import the Express and Mongoose libraries
 const express = require('express');
 const mongoose = require('mongoose');
+
+// Create an Express application
 const app = express();
+
+// Import the Note model from the specified file
 const Note = require('./models/note');
 
+// Load environment variables from a .env file
+require('dotenv').config();
+
+// Middleware function for logging request information
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method); // Log HTTP method
+  console.log('Path:  ', request.path);   // Log requested path
+  console.log('Body:  ', request.body);   // Log request body
+  console.log('---');
+  next();  // Call the next middleware in the stack
+};
+
+// Middleware function for handling unknown endpoints
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' }); // Send a 404 response with an error message
+};
+
+// Enable Cross-Origin Resource Sharing
+app.use(cors());
+
+// looks incoming JSON requests
 app.use(express.json());
 
-const password = process.argv[2];
-const url = process.env.MONGODB_URI;
+// use the requestLogger middleware for all routes
+app.use(requestLogger);
 
-mongoose.set('strictQuery', false);
+// Serve static files from the 'build' directory
+app.use(express.static('build'));
 
-mongoose.connect(url)
-  .then(result => {
-    console.log('Connected to MongoDB');
-  })
-  .catch(error => {
-    console.log('Error connecting to MongoDB:', error.message);
-  });
+// array to store notes 
+let notes = []
 
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-});
-
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-
-const PORT = process.env.PORT || 3001;
-
+// Route to get all notes from the MongoDB database
 app.get('/api/notes', (request, response) => {
   Note.find({}).then(notes => {
-    response.json(notes);
+    response.json(notes); // Send JSON response with the retrieved notes
   });
 });
 
+// Route to add a new note to the MongoDB database
+app.post('/api/notes', (request, response) => {
+  const body = request.body;
+
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' }); // Send a 400 response with an error message
+  }
+
+  // Create a new Note instance with content and importance information
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+  });
+
+  // Save the new note to the MongoDB database
+  note.save().then(savedNote => {
+    response.json(savedNote); // Send JSON response with the saved note
+  });
+});
+
+// Route to get a specific note by ID from the MongoDB database
+app.get('/api/notes/:id', (request, response) => {
+  Note.findById(request.params.id).then(note => {
+    response.json(note); // Send JSON response with the retrieved note
+  });
+});
+
+// Route to delete a note by ID from the MongoDB database
+app.delete('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id);
+  notes = notes.filter(note => note.id !== id); // Remove the note with the specified ID from the array
+
+  response.status(204).end(); // Send a 204 response
+});
+
+// Use the unknownEndpoint middleware for all unmatched routes
+app.use(unknownEndpoint);
+
+// Retrieve the port number from the environment variable and start the server
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`); // Log the port number when the server starts
 });
