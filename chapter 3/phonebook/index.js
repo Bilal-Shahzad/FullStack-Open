@@ -85,8 +85,8 @@ app.delete('/api/notes/:id', (request, response) => {
 // Use the unknownEndpoint middleware for all unmatched routes
 app.use(unknownEndpoint);
 
-// Retrieve the port number from the environment variable and start the server
-const PORT = process.env.PORT;
+// Retrieve the port 3001 from the environment variable and start the server
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`); // Log the port number when the server starts
 });
