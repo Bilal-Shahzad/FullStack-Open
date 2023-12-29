@@ -1,6 +1,7 @@
 // Import the Express and Mongoose libraries
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // Create an Express application
 const app = express();
@@ -20,6 +21,17 @@ const requestLogger = (request, response, next) => {
   next();  // Call the next middleware in the stack
 };
 
+const mongoDb = process.env.MONGODB_URI;
+
+mongoose
+  .connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.log('Error connecting to MongoDB:', error.message);
+  });
+
 // Middleware function for handling unknown endpoints
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' }); // Send a 404 response with an error message
@@ -38,7 +50,7 @@ app.use(requestLogger);
 app.use(express.static('build'));
 
 // array to store notes 
-let notes = []
+// let notes = []
 
 // Route to get all notes from the MongoDB database
 app.get('/api/notes', (request, response) => {
@@ -76,17 +88,22 @@ app.get('/api/notes/:id', (request, response) => {
 
 // Route to delete a note by ID from the MongoDB database
 app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter(note => note.id !== id); // Remove the note with the specified ID from the array
-
-  response.status(204).end(); // Send a 204 response
+  Note.findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.status(204).end();
+    })
+    .catch((error) => {
+      console.log('Error deleting note:', error.message);
+      response.status(500).json({ error: 'Internal Server Error' });
+    });
 });
+
 
 // Use the unknownEndpoint middleware for all unmatched routes
 app.use(unknownEndpoint);
 
 // Retrieve the port 3001 from the environment variable and start the server
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`); // Log the port number when the server starts
 });
