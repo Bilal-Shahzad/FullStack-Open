@@ -10,7 +10,7 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const uri = `mongodb+srv://bshahzad01:${password}@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
+const uri = ``;
 
 const client = new MongoClient(uri, {
   serverApi: {
