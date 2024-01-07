@@ -1,10 +1,7 @@
-// imoorts express 
 const express = require('express')
-// creates exxpress application within app
 const app = express()
 
 app.use(express.json())
-// adds middleware to express
 
 const morgan = require("morgan")
 const cors = require("cors")
@@ -62,14 +59,11 @@ morgan.token("post", function (req) {
 })
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :post")
-)// this sets up a rooute for handling GET requests 
-
+)
 app.get("/info", (request, response) => {
-  // (request, response) gets used when a GET request is made for info 
   response.send(
     `phonebook has info for ${persons.length} people <br> ${new Date()}`
   )
-// response.send sends a response call 
 })
 
 app.get("/api/persons", (request, response) => {
@@ -102,7 +96,6 @@ app.post("/api/persons", (request, response) => {
     })
   }
 
-// creates a new person object with randomly generate ID 
   const person = {
     id: Math.floor(Math.random() * 1000),
     name: body.name,
@@ -114,9 +107,7 @@ app.post("/api/persons", (request, response) => {
     })
   }
 
-  // adds the person to the array 
   persons = persons.concat(person)
-  // sends a JSON response that conatains the new person 
   response.json(person)
 })
 
@@ -135,16 +126,13 @@ app.get('/', (req, res) => {
   console.log('GET request to /')
   res.send('<h1>Hello World!</h1>')
 })
-// sets up route for handline http get requests to root path (/)
 
 app.get('/api/notes', (req, res) => {
   console.log('GET request to /api/notes')
   res.json(notes)
 })
-// defines a route for handling HTTP get reuqest to /api/notes
 
 const generateId = () => {
-  // function for generating a new ID 
   const maxId = notes.length > 0
     ? Math.max(...notes.map(n => n.id))
     : 0
@@ -152,7 +140,6 @@ const generateId = () => {
 }
 
 app.post('/api/notes', (request, response) => {
-  // route for handling HTTP post request to create a new note 
   console.log('POST request to /api/notes')
   const body = request.body
 
@@ -175,7 +162,6 @@ app.post('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (request, response) => {
-  // route for handling HTTP get to fetch a single note 
   const id = Number(request.params.id)
   console.log(`GET request to /api/notes/${id}`)
   const note = notes.find(note => note.id === id)
@@ -188,7 +174,6 @@ app.get('/api/notes/:id', (request, response) => {
 })
 
 app.delete('/api/notes/:id', (request, response) => {
-  // route for handling HTTP DELETE requests a note 
   const id = Number(request.params.id)
   console.log(`DELETE request to /api/notes/${id}`)
   notes = notes.filter(note => note.id !== id)
@@ -200,4 +185,3 @@ const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-// specifies the port the server will be running on

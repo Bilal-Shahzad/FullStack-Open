@@ -3,14 +3,14 @@ console.log("Starting MongoDB connection...");
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoose = require('mongoose');
 
-const password = process.argv[2];
 
 if (process.argv.length < 3) {
   console.log("Please provide the password as an argument: node mongo.js <password>");
   process.exit(1);
 }
+const password = process.argv[2]
 
-const uri = `mongodb+srv://bshahzad01:${BILSHAZ}@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://bshahzad01:${password}@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -22,7 +22,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server (optional starting in v4.7)
     console.log("Connecting to MongoDB...");
     await client.connect();
     console.log("Connected to MongoDB!");
