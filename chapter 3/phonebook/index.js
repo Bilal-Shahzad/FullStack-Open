@@ -1,109 +1,203 @@
-// Import the Express and Mongoose libraries
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+// imoorts express 
+const express = require('express')
+// creates exxpress application within app
+const app = express()
 
-// Create an Express application
-const app = express();
+app.use(express.json())
+// adds middleware to express
 
-// Import the Note model from the specified file
-const Note = require('./models/note');
+const morgan = require("morgan")
+const cors = require("cors")
 
-// Load environment variables from a .env file
-require('dotenv').config();
 
-// Middleware function for logging request information
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method); // Log HTTP method
-  console.log('Path:  ', request.path);   // Log requested path
-  console.log('Body:  ', request.body);   // Log request body
-  console.log('---');
-  next();  // Call the next middleware in the stack
-};
+let notes = [
+  {
+    id: 1,
+    content: "HTML is easy",
+    important: true
+  },
+  {
+    id: 2,
+    content: "Browser can execute only JavaScript",
+    important: false
+  },
+  {
+    id: 3,
+    content: "GET and POST are the most important methods of HTTP protocol",
+    important: true
+  }
+]
 
-const mongoDb = process.env.MONGODB_URI;
+let persons = [
+  {
+    id: 1,
+    name: "Arto Hellas",
+    number: "040-123456",
+  },
+  {
+    id: 2,
+    name: "Ada Lovelace",
+    number: "39-44-5323523",
+  },
+  {
+    id: 3,
+    name: "Dan Abramov",
+    number: "12-43-234345",
+  },
+  {
+    id: 4,
+    name: "Mary Poppendieck",
+    number: "39-23-6423122",
+  },
+]
+app.use(cors())
 
-mongoose
-  .connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.log('Error connecting to MongoDB:', error.message);
-  });
+app.use(express.json())
+morgan.token("post", function (req) {
+  if (req.method === "POST") {
+    return JSON.stringify(req.body)
+  } else {
+    return " "
+  }
+})
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :post")
+)// this sets up a rooute for handling GET requests 
 
-// Middleware function for handling unknown endpoints
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' }); // Send a 404 response with an error message
-};
+app.get("/info", (request, response) => {
+  // (request, response) gets used when a GET request is made for info 
+  response.send(
+    `phonebook has info for ${persons.length} people <br> ${new Date()}`
+  )
+// response.send sends a response call 
+})
 
-// Enable Cross-Origin Resource Sharing
-app.use(cors());
+app.get("/api/persons", (request, response) => {
+  response.json(persons)
+})
 
-// looks incoming JSON requests
-app.use(express.json());
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter(person => person.id !== id)
 
-// use the requestLogger middleware for all routes
-app.use(requestLogger);
+  response.status(204).end()
+})
 
-// Serve static files from the 'build' directory
-app.use(express.static('build'));
+// sets up route handler for HTTP post
+app.post("/api/persons", (request, response) => {
+  // extracts body property from request 
+  const body = request.body
 
-// array to store notes 
-// let notes = []
-
-// Route to get all notes from the MongoDB database
-app.get('/api/notes', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes); // Send JSON response with the retrieved notes
-  });
-});
-
-// Route to add a new note to the MongoDB database
-app.post('/api/notes', (request, response) => {
-  const body = request.body;
-
-  if (body.content === undefined) {
-    return response.status(400).json({ error: 'content missing' }); // Send a 400 response with an error message
+  // checks if the name property is missing in the request body 
+  if (!body.name) {
+    return response.status(400).json({
+      error: "name missing",
+    })
   }
 
-  // Create a new Note instance with content and importance information
-  const note = new Note({
+  // checks if ther are is a person with the same name 
+  if (persons.filter(person => person.name === body.name).length > 0) {
+    return response.status(400).json({
+      error: "name must be unique",
+    })
+  }
+
+// creates a new person object with randomly generate ID 
+  const person = {
+    id: Math.floor(Math.random() * 1000),
+    name: body.name,
+    number: body.number,
+  }
+  if (!body.number) {
+    return response.status(400).json({
+      error: "number missing",
+    })
+  }
+
+  // adds the person to the array 
+  persons = persons.concat(person)
+  // sends a JSON response that conatains the new person 
+  response.json(person)
+})
+
+app.get("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(person => person.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
+})
+
+app.get('/', (req, res) => {
+  console.log('GET request to /')
+  res.send('<h1>Hello World!</h1>')
+})
+// sets up route for handline http get requests to root path (/)
+
+app.get('/api/notes', (req, res) => {
+  console.log('GET request to /api/notes')
+  res.json(notes)
+})
+// defines a route for handling HTTP get reuqest to /api/notes
+
+const generateId = () => {
+  // function for generating a new ID 
+  const maxId = notes.length > 0
+    ? Math.max(...notes.map(n => n.id))
+    : 0
+  return maxId + 1
+}
+
+app.post('/api/notes', (request, response) => {
+  // route for handling HTTP post request to create a new note 
+  console.log('POST request to /api/notes')
+  const body = request.body
+
+  if (!body.content) {
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+
+  const note = {
     content: body.content,
     important: body.important || false,
-  });
+    date: new Date(),
+    id: generateId(),
+  }
 
-  // Save the new note to the MongoDB database
-  note.save().then(savedNote => {
-    response.json(savedNote); // Send JSON response with the saved note
-  });
-});
+  notes = notes.concat(note)
 
-// Route to get a specific note by ID from the MongoDB database
+  response.json(note)
+})
+
 app.get('/api/notes/:id', (request, response) => {
-  Note.findById(request.params.id).then(note => {
-    response.json(note); // Send JSON response with the retrieved note
-  });
-});
+  // route for handling HTTP get to fetch a single note 
+  const id = Number(request.params.id)
+  console.log(`GET request to /api/notes/${id}`)
+  const note = notes.find(note => note.id === id)
 
-// Route to delete a note by ID from the MongoDB database
+  if (note) {
+    response.json(note)
+  } else {
+    response.status(404).end()
+  }
+})
+
 app.delete('/api/notes/:id', (request, response) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end();
-    })
-    .catch((error) => {
-      console.log('Error deleting note:', error.message);
-      response.status(500).json({ error: 'Internal Server Error' });
-    });
-});
+  // route for handling HTTP DELETE requests a note 
+  const id = Number(request.params.id)
+  console.log(`DELETE request to /api/notes/${id}`)
+  notes = notes.filter(note => note.id !== id)
 
+  response.status(204).end()
+})
 
-// Use the unknownEndpoint middleware for all unmatched routes
-app.use(unknownEndpoint);
-
-// Retrieve the port 3001 from the environment variable and start the server
-const PORT = process.env.PORT;
+const PORT = 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`); // Log the port number when the server starts
-});
+  console.log(`Server running on port ${PORT}`)
+})
+// specifies the port the server will be running on
