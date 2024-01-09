@@ -1,42 +1,26 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://BILSHAZ:<password>@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority";
 
-if (process.argv.length<3) {
-  console.log('give password as argument')
-  process.exit(1)
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
 }
-
-const password = process.argv[2]
-
-const url =
-  `mongodb+srv://fullstack:${password}@cluster0.o1opl.mongodb.net/?retryWrites=true&w=majority`
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
-})
-
-const Note = mongoose.model('Note', noteSchema)
-
-const note = new Note({
-  content: 'Mongoose makes things easy',
-  date: new Date(),
-  important: true,
-})
-
-/*
-note.save().then(result => {
-  console.log('note saved!')
-  mongoose.connection.close()
-})
-*/
-
-Note.find({}).then(result => {
-  result.forEach(note => {
-    console.log(note)
-  })
-  mongoose.connection.close()
-})
+run().catch(console.dir);
