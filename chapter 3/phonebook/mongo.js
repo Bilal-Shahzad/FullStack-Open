@@ -1,56 +1,42 @@
-console.log("Starting MongoDB connection...");
+const mongoose = require('mongoose')
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const mongoose = require('mongoose');
-
-
-if (process.argv.length < 3) {
-  console.log("Please provide the password as an argument: node mongo.js <password>");
-  process.exit(1);
+if (process.argv.length<3) {
+  console.log('give password as argument')
+  process.exit(1)
 }
+
 const password = process.argv[2]
 
-const uri = `mongodb+srv://bshahzad01:${password}@cluster0.2fdi6qj.mongodb.net/?retryWrites=true&w=majority`;
+const url =
+`mongodb+srv://fullstack:${password}@cluster0.o1opl.mongodb.net/?retryWrites=true&w=majority`
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
 
-async function run() {
-  try {
-    console.log("Connecting to MongoDB...");
-    await client.connect();
-    console.log("Connected to MongoDB!");
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
 
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+const Note = mongoose.model('Note', noteSchema)
 
-    const Note = require('..');
-    
-    // Fetch and print all notes
-    Note.find({}).then(result => {
-      console.log("All notes in the database:");
-      result.forEach(note => {
-        console.log(note);
-      });
-      mongoose.connection.close();
-      console.log("Mongoose connection closed.");
-    }).catch(error => {
-      console.error("Error fetching notes:", error);
-    });
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-    console.log("MongoDB connection closed.");
-  }
-}
+const note = new Note({
+  content: 'Mongoose makes things easy',
+  date: new Date(),
+  important: true,
+})
 
-// Run the MongoDB connection and operations
-run().catch(error => {
-  console.error("Error connecting to MongoDB:", error);
-});
+/*
+note.save().then(result => {
+  console.log('note saved!')
+  mongoose.connection.close()
+})
+*/
+
+Note.find({}).then(result => {
+  result.forEach(note => {
+    console.log(note)
+  })
+  mongoose.connection.close()
+})
