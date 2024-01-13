@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' }); 
 
 if (!process.env.MONGO_PASSWORD) {
   console.error('MongoDB password not found in environment variables.');
