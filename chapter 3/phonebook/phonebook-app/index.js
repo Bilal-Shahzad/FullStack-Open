@@ -5,6 +5,14 @@ const app = express()
 const morgan = require("morgan")
 const cors = require("cors")
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
 app.use(cors())
 morgan.token('body', (request) => JSON.stringify(request.body))
 app.use(express.json())
@@ -115,6 +123,7 @@ const errorHandler = (error, request, response, next) => {
 }
   // this has to be the last loaded middleware.
 app.use(errorHandler)
+app.use(unknownEndpoint)
 
 
 const port = 3002
