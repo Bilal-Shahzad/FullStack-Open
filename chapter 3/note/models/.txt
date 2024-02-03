@@ -1,0 +1,6 @@
+const password = process.env.MONGO_PASSWORD;
+
+const url = `mongodb+srv://BILSHAZ:${password}@cluster0.vvqe6kj.mongodb.net/?retryWrites=true&w=majority`;
+
+require('dotenv').config({ path: '/Users/bilalshahzad/Desktop/Software Engineer /FullStack-Open/chapter 3/phonebook/.env' }); 
+const mongoose = require('mongoose');

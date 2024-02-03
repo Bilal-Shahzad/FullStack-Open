@@ -5,14 +5,6 @@ const app = express()
 const morgan = require("morgan")
 const cors = require("cors")
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-
 app.use(cors())
 morgan.token('body', (request) => JSON.stringify(request.body))
 app.use(express.json())
@@ -70,24 +62,24 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 const postMorgan = morgan(':method :url :status :res[content-length] - :response-time ms :body')
 
-app.post('/api/persons', postMorgan, (request, response) => {
-  const body = request.body
+// app.post('/api/persons', postMorgan, (request, response) => {
+//   const body = request.body
   
-  if(!body.name || !body.number){
-      return response.status(400).json({
-          error: 'name or number missing'
-      })
-  }else{
-      const person = new Person({
-          name: body.name,
-          number: body.number,
-      })
+//   if(!body.name || !body.number){
+//       return response.status(400).json({
+//           error: 'name or number missing'
+//       })
+//   }else{
+//       const person = new Person({
+//           name: body.name,
+//           number: body.number,
+//       })
 
-      person.save().then(person => {
-          response.json(person)
-      })
-  }  
-})
+//       person.save().then(person => {
+//           response.json(person)
+//       })
+//   }  
+// })
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
@@ -123,8 +115,6 @@ const errorHandler = (error, request, response, next) => {
 }
   // this has to be the last loaded middleware.
 app.use(errorHandler)
-app.use(unknownEndpoint)
-
 
 const port = 3002
 app.listen(port, () =>

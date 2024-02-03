@@ -33,13 +33,21 @@ app.use(requestLogger)
 app.use(express.static('build'))
 
 
-app.get('/api/notes', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
-})
+app.get('/api/note', async (request, response) => {
+  try {
+    console.log(request);
+    console.log(response);
+    
+    const notes = await Note.find({});
+    response.json(notes);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-app.post('/api/notes', (request, response) => {
+
+app.post('/api/note', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -56,7 +64,7 @@ app.post('/api/notes', (request, response) => {
   })
 })
 
-app.get('/api/notes/:id', (request, response, next) => {
+app.get('/api/note/:id', (request, response, next) => {
   Note.findById(request.params.id)
     .then(note => {
       if (note) {
@@ -94,7 +102,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const PORT = 3004
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
